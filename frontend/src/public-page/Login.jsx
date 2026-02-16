@@ -1,16 +1,59 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import {useContext} from 'react'
+import { AuthContext } from '../AuthContext';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 
-const Login = ()=> {
+export const Login = ()=> {
+  const { login } = useContext(AuthContext);
+
   const navigate = useNavigate()
-  function handleLogin(e) {
+  async function handleLogin (e) {
     e.preventDefault()
-    console.log("login clicked");
-    
-    navigate('/')
+    // Perform login logic here (e.g., API call to authenticate user)
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    console.log("front",email, password);
+
+    const axiosResponse = await axios.post('http://localhost:3000/home/login',{email,password},{
+      headers: {
+        'Content-Type': 'application/json'}
+      })
+      console.log(axiosResponse.data);
+      if(axiosResponse.data.success){
+        alert("Login Successful: " + axiosResponse.data.message);
+       
+        const token = axiosResponse.data.token;
+        console.log('tokennn',token);
+        if(token){
+          const tokenverify = await axios.post('http://localhost:3000/home/verify-token',{token:token},{
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          console.log("token data",tokenverify.data);
+          if(tokenverify.data.success === true){
+            
+            // console.log("token data",tokenverify.data.success);
+            // const  value = tokenverify.data.success;
+            //  console.log("value",value);
+            // setloginStatus(tokenverify.data.success); older one
+            login();
+            navigate('/');
+          }else{
+            alert("Token verification failed: " + tokenverify.data.message);
+          }
+        }
+        
+      }else{
+        alert("Login Failed: " + axiosResponse.data.message);
+      }
     
   }
+
+
+  
   return (
     <>
       <div className='flex flex-col items-center justify-center h-screen bg-[url("https://www.teahub.io/photos/full/88-886260_cyber-crime.jpg")] bg-cover' >
@@ -34,5 +77,14 @@ const Login = ()=> {
   )
 }
 
+//  export const AuthProvider = ({children}) => {
+//   const [loginStatus , setloginStatus] = useState(false)
+    
+//     return (
+//       <AuthContext.Provider value={{loginStatus ,setloginStatus }}>
+//         {children}
+//       </AuthContext.Provider>
+//     );
+//   };
 
-export default Login
+

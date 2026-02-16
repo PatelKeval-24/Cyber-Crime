@@ -1,7 +1,5 @@
 import React from 'react'
 import icon from '../img/lock2.png'
-import '../Css/body.css'
-
 
 
 const Crimetypes = (props) => {

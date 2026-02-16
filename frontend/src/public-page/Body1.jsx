@@ -30,8 +30,6 @@ const Body1 = () => {
             return <Crimetypes key={idex} attackName={elem.attackName}  about={elem.description}   />
           })
         }
-     
-   
      </div>
 
       </div>

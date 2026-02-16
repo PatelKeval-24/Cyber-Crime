@@ -12,6 +12,7 @@ const registerHandler= async (e)=>{
     address: form.address.value,
     password: form.password.value,
     password2: form.password2.value,
+    registerTime: new Date().toString()
 }
  if (!registerData.name || !registerData.email || !registerData.contectNumber || !registerData.address || !registerData.password || !registerData.password2) {
   alert("Please fill all the fields");
@@ -22,7 +23,7 @@ const registerHandler= async (e)=>{
  }
  
   console.log(registerData);
-  const axiosResponse = await axios.post('http://localhost:3000/register', registerData , {
+  const axiosResponse = await axios.post('http://localhost:3000/home/register', registerData , {
     headers: {
       'Content-Type': 'application/json'
     }
