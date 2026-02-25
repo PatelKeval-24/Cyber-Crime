@@ -1,6 +1,6 @@
 import React from "react";
 
-const Dashbord = () => {
+const VolunteerDashboard = () => {
   return (
     <div className="bg-gray-900 h-screen">
      
@@ -82,4 +82,4 @@ const Dashbord = () => {
   );
 };
 
-export default Dashbord;
+export default VolunteerDashboard;

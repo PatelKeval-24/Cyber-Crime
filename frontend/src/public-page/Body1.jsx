@@ -21,7 +21,7 @@ const Body1 = () => {
           
         </div>
       </div>
-      <h1 className="text-black text-4xl font-bold text-center bg-blue-500">Types of Cyber Crimes</h1>
+      <h1 className="text-black p-2 text-4xl font-bold text-center bg-blue-600">Types of Cyber Crimes</h1>
       <div className=" h-180 ">
       <div className="grid grid-cols-2 justify-center p-10 gap-10 border-2   bg-gray-900 ">
 

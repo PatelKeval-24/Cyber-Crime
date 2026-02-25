@@ -7,6 +7,7 @@ axios.defaults.withCredentials = true;
 
 export const Login = ()=> {
   const { login } = useContext(AuthContext);
+  const { userName } = useContext(AuthContext);
 
   const navigate = useNavigate()
   async function handleLogin (e) {
@@ -14,18 +15,20 @@ export const Login = ()=> {
     // Perform login logic here (e.g., API call to authenticate user)
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    console.log("front",email, password);
+    // console.log("front",email, password);
 
     const axiosResponse = await axios.post('http://localhost:3000/home/login',{email,password},{
       headers: {
         'Content-Type': 'application/json'}
       })
-      console.log(axiosResponse.data);
+      // console.log(axiosResponse.data);
+      // console.log(axiosResponse.cooki);
+
       if(axiosResponse.data.success){
         alert("Login Successful: " + axiosResponse.data.message);
        
         const token = axiosResponse.data.token;
-        console.log('tokennn',token);
+        // console.log('tokennn',token);
         if(token){
           const tokenverify = await axios.post('http://localhost:3000/home/verify-token',{token:token},{
             headers: {
@@ -33,14 +36,13 @@ export const Login = ()=> {
             }
           })
           console.log("token data",tokenverify.data);
-          if(tokenverify.data.success === true){
-            
-            // console.log("token data",tokenverify.data.success);
-            // const  value = tokenverify.data.success;
-            //  console.log("value",value);
-            // setloginStatus(tokenverify.data.success); older one
-            login();
-            navigate('/');
+          // console.log("token role",tokenverify.data.user.role);
+          if(tokenverify.data.success === true && tokenverify.data.user.role){
+            // const role = tokenverify.data.user.role;
+            // console.log(tokenverify.data.user.role)
+            // console.log(tokenverify.data.user.name)
+            login(tokenverify.data.user);
+            navigate(`/home/${tokenverify.data.user.role}-dashboard`);
           }else{
             alert("Token verification failed: " + tokenverify.data.message);
           }
@@ -76,15 +78,3 @@ export const Login = ()=> {
     </>
   )
 }
-
-//  export const AuthProvider = ({children}) => {
-//   const [loginStatus , setloginStatus] = useState(false)
-    
-//     return (
-//       <AuthContext.Provider value={{loginStatus ,setloginStatus }}>
-//         {children}
-//       </AuthContext.Provider>
-//     );
-//   };
-
-

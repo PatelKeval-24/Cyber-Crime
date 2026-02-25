@@ -1,38 +1,35 @@
 import React from "react";
 import { Link,useNavigate } from "react-router-dom";
 import { useContext , } from "react";
-// import {AuthContext} from "./Login"
 import {AuthContext} from "../AuthContext"
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
 
 const Navbar2 = () => {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // console.log(isLoggedIn,'isLogin')
-  const {loginStatus,logout} =  (useContext(AuthContext));
-  console.log("login222",loginStatus);
-  // setIsLoggedIn(value);
+  
+  const {loginStatus, logout , role} =  (useContext(AuthContext));
+  // console.log("login222",role);
+
+ 
   
   const navigate = useNavigate()
 const logoutHandle = async () =>{
-  // const navigate = useNavigate()
+
 
   const axiosResponse = await axios.post('http://localhost:3000/home/logout',{
       headers: {
         'Content-Type': 'application/json'}
       })
       logout();
-  console.log('axiosResponse', axiosResponse)
+  // console.log('axiosResponse', axiosResponse)
   navigate('/');
 }
-
-
   return (
     <div className="bg-indigo-950 flex justify-between items-center p-4">
       <div>
         <h1 className="text-white text-2xl font-bold">
-          Crime Repository . . . . .
+          Crime Report Desk
         </h1>
       </div>
       <div>
@@ -40,11 +37,12 @@ const logoutHandle = async () =>{
           <Link to="/">Home</Link>
           <Link to="/home/crime-info">Crime Info</Link>
 
-          <Link to="/home/crime-submit">Crime Submit</Link>
-          <Link to="/home/crime-repository">Crime Repository</Link>
-          <Link to="/home/dashbord">Dashbord</Link>
           {loginStatus ? (
             <>
+            <Link to="/home/crime-submit">Crime Submit</Link>
+            <Link to="/home/crime-repository">Crime Repository</Link>
+            {role === 'volunteer'?(<Link to="/home/volunteer-dashboard">Dashboard</Link>)
+            :(<Link to="/home/admin-dashboard">Dashboard</Link>)}
               <button to="/" onClick={logoutHandle}>Logout</button>
             </>
           ) : (

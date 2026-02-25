@@ -3,6 +3,8 @@ var app = express();
 import cors from 'cors';
 import backRegisterHandle from './backRegister.js';
 import { verifyToken, logoutHandle, backLoginHandle } from './backLogin.js';
+import { aprovedBack, getRequestHandler, rejectBack, volunteerData } from './Oprequest.js';
+import backReport from './backReports.js';
 
 const PORT = 3000;
 
@@ -14,10 +16,17 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+
 app.use(backRegisterHandle);
 app.use(backLoginHandle);
 app.use(verifyToken);
 app.use(logoutHandle);
+
+app.get("/home/request", getRequestHandler);
+app.post("/home/request/approved", aprovedBack);
+app.post("/home/request/rejected", rejectBack);
+app.get("/home/admin-dashboard/volunteer", volunteerData);
+app.post("/home/crime-submit", backReport )
 
 
 
