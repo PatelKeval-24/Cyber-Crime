@@ -14,8 +14,10 @@ const dbresult2 = await db.collection('admin').findOne({ email: email})
   if (!dbresult2) {
     return res.status(401).json({ success: false, message: 'Invalid email or password' });
   }
-
+  // console.log(dbresult2.email,dbresult2.password,dbresult2 , "admin")
+  // console.log(email,password)
   if (dbresult2.email === email && dbresult2.password === password){ 
+    // console.log(dbresult2 , "admin ---")
           const token = jwt.sign({ email: email,role:"admin",name : dbresult2.name }, "secretkey", { expiresIn: '1h' });
           res.cookie('token', token, {
             httpOnly: true,

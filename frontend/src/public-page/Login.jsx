@@ -7,11 +7,12 @@ axios.defaults.withCredentials = true;
 
 export const Login = ()=> {
   const { login } = useContext(AuthContext);
-  const { userName } = useContext(AuthContext);
+  const { tokeninfo } = useContext(AuthContext);
 
   const navigate = useNavigate()
   async function handleLogin (e) {
     e.preventDefault()
+    
     // Perform login logic here (e.g., API call to authenticate user)
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -21,8 +22,8 @@ export const Login = ()=> {
       headers: {
         'Content-Type': 'application/json'}
       })
-      // console.log(axiosResponse.data);
-      // console.log(axiosResponse.cooki);
+      console.log(axiosResponse.data);
+      console.log(axiosResponse.cooki);
 
       if(axiosResponse.data.success){
         alert("Login Successful: " + axiosResponse.data.message);
@@ -41,6 +42,7 @@ export const Login = ()=> {
             // const role = tokenverify.data.user.role;
             // console.log(tokenverify.data.user.role)
             // console.log(tokenverify.data.user.name)
+            tokeninfo(token)
             login(tokenverify.data.user);
             navigate(`/home/${tokenverify.data.user.role}-dashboard`);
           }else{

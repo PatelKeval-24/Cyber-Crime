@@ -6,11 +6,11 @@ const AdminDashboard = () => {
 const {name} = useContext(AuthContext)
 
   return (
-    <div className="bg-gray-900 h-screen">
+    <div className="bg-gray-900 h-full ">
      
       {/* admin menu */}
-      <div className="flex">
-        <div className="w-1/5 bg-gray-800 h-screen">
+      <div className="">
+        <div className=" fixed w-64 bg-[#111827] h-[calc(100vh-4rem)]x">
           <h1 className="text-white text-center p-2 h-10 m-5 bg-purple-700">{name}</h1>
 
           <div className="flex flex-col gap-4 mt-4 ml-4 w-6/7">
@@ -45,7 +45,7 @@ const {name} = useContext(AuthContext)
           </div>
         </div>
         {/* display content */}
-        <div className="w-5/6 bg-gray-700 h-screen">
+        <div className="ml-64 bg-neutral-950 min-h-screen p-6">
         <Outlet/>
         </div>
       </div>

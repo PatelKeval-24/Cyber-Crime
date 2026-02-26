@@ -1,12 +1,12 @@
 import React from 'react'
 import { connectDB, getDB } from './db.js';
+import { log } from 'node:console';
+
 
 connectDB();
 
-
-const backReport = async (req,res) =>{
+export const backReport = async (req,res) =>{
   
-
   const db = getDB();
   const collection = await db.listCollections({name : "report"}).toArray();
   const reportData = () => {
@@ -22,25 +22,18 @@ const backReport = async (req,res) =>{
     location,
     description,
     reportStatus = "pending",
-    date = new Date().toString(), 
+    date = new Date().toString(),
+    token
   } = req.body.reportData;
   //submited by = ******
-  console.log(name,
-    age,
-    gender,
-    victimAddress,
-    contact,
-    email,
-    crimeType,
-    crimeCategory,
-    priority,
-    location,
-    description, 'report data');
+  // console.log('jwt token',token.name);
+  // console.log('jwt token',token.email);
+  const submitedBy= token.name;
   
   const addReport = db.collection('report').insertOne(
-    {name, age,gender,victimAddress,contact,email,crimeType, crimeCategory,priority,location,description,reportStatus,date
+    {name, age,gender,victimAddress,contact,email,crimeType, crimeCategory,priority,location,description,reportStatus,date,submitedBy
     }) 
-    console.log(req);
+    // console.log(req);
     
       res.send("data get it succesfully")
       
@@ -55,5 +48,14 @@ const backReport = async (req,res) =>{
 
 }
 
-export default backReport
-//admin
+export const giveReports =async (req , res) =>{
+  console.log('got it')
+  const db = getDB();
+  const getPendingReports =await db.collection('report').find({reportStatus : "pending"}).toArray()
+  console.log(getPendingReports);
+
+  res.status(200).json({
+    pendingReport : getPendingReports
+  })
+
+}

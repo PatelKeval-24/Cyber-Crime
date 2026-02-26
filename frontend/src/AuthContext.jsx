@@ -7,9 +7,12 @@ export const AuthProvider = ({ children }) => {
   const [role , setRole] = useState(null)
   // console.log(role, 'let role')
   const [name , setName] = useState(null);
-
-  
-
+  const [token, setToken] = useState(null);
+   
+  const tokeninfo = (token) => {
+      setToken(token);
+  } 
+  // console.log(token,"jwt")
   const login = (user) => {
     setRole(user.role)
     setName(user.name)
@@ -26,7 +29,7 @@ export const AuthProvider = ({ children }) => {
 
 console.log('login out', role)
   return (
-    <AuthContext.Provider value={{ loginStatus, login, logout, role , name }}>
+    <AuthContext.Provider value={{ loginStatus, login, logout, role , name , token ,tokeninfo }}>
       {" "}
       {children}{" "}
     </AuthContext.Provider>

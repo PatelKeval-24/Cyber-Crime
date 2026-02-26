@@ -1,12 +1,13 @@
 import React from "react";
 
 const VolunteerDashboard = () => {
+  
   return (
     <div className="bg-gray-900 h-screen">
      
       {/* admin menu */}
       <div className="flex">
-        <div className="w-1/5 bg-gray-800 h-screen">
+        <div className="w-1/5 bg-[#111827] h-screen">
           <h1 className="text-white">Name____</h1>
           <div>
             <ul className="flex flex-col gap-4 mt-4 ml-4 w-6/7">

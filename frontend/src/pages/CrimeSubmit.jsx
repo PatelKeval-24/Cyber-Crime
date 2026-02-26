@@ -1,10 +1,13 @@
-import React from "react";
+import React,{useContext} from "react";
 import axios from 'axios';
+import { AuthContext } from "../AuthContext";
+
 
 const CrimeSubmit = () => {
   const inputStyle = "p-1  bg-gray-200 border-2 border-gray-500 rounded-lg "
-  const hedingStyle = "text-center font-bold p-3"
-
+  const hedingStyle = "text-white text-center font-bold p-3"
+  const token = useContext(AuthContext);
+  
   const reportsHandler =async (e) =>{
     e.preventDefault();
     const form = e.target;
@@ -20,8 +23,10 @@ const CrimeSubmit = () => {
       crimeCategory : form.crimeCategory.value,
       priority : form.priority.value,
       location : form.location.value,
-      description : form.dtext.value
+      description : form.dtext.value,
+      token:token
     }
+    // console.log(token,"jwt")
 
     // console.log(reportData)
     const reportsended =await axios.post("http://localhost:3000/home/crime-submit",{reportData},{
@@ -41,9 +46,9 @@ const CrimeSubmit = () => {
         <h1 className="text-white  text-2xl font-bold text-center">
           Crime Submit
         </h1>
-      <form onSubmit={reportsHandler} className="flex bg-blue-300 m-15 border rounded-3xl">
+      <form onSubmit={reportsHandler} className="flex bg-blue-300/20 m-15 border rounded-3xl">
         
-        <div className="w-1/2 p-5 flex flex-col gap-3 border-2 border-red-300 hover:bg-blue-400">
+        <div className="w-1/2 p-5 flex flex-col gap-3   hover:bg-blue-400">
           <h1 className={hedingStyle} >Victim Information</h1>
         <label className="">Name :</label>
         <input type="text" name="vname" id="vname" className={inputStyle} required/>
@@ -73,7 +78,7 @@ const CrimeSubmit = () => {
         <input type="email" name="vemail" id="vemail" className={inputStyle} required/>
 
         </div>
-        <div className="w-1/2 p-5 flex flex-col gap-3 border-2 border-green-400 hover:bg-blue-400">
+        <div className="w-1/2 p-5 flex flex-col gap-3  hover:bg-blue-400">
           <h1 className={hedingStyle} >Crime Information</h1>
 
         <label>Crime Type :</label>
