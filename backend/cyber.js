@@ -9,7 +9,7 @@ import {backReport, giveReports} from './backReports.js';
 const PORT = 3000;
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://cyber-crime-desk-frontend.onrender.com',
     credentials: true
    
 }));
@@ -36,3 +36,5 @@ app.get("/home/admin-dashboard/report", giveReports)
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
 }) 
+
+// https://cyber-crime-desk.onrender.com
