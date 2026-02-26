@@ -7,7 +7,7 @@ const [volunteerData , setvolunteerData] = useState([])
 useEffect( () =>{
 const  volunteerGet = async () =>{
      
-    const response =await axios.get('http://localhost:3000/home/admin-dashboard/volunteer')
+    const response =await axios.get('https://cyber-crime-desk.onrender.com/home/admin-dashboard/volunteer')
 
     console.log('res ;;;' ,response.data.volunteer)
     setvolunteerData(response.data.volunteer)

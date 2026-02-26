@@ -4,7 +4,7 @@ import CrimeInfo from "./public-page/CrimeInfo";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import CrimeSubmit from "./pages/crimeSubmit";
+import CrimeSubmit from "./pages/CrimeSubmit";
 import CrimeRepository from "./pages/CrimeRepository";
 import { Login } from "./public-page/Login";
 import Register from "./public-page/Register";

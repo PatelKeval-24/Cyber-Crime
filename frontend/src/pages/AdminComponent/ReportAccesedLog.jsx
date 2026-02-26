@@ -6,7 +6,7 @@ const [report , setReport] = useState([])
   useEffect( () =>{
     const getReport =async () =>{
     
-      const pendingReport =await axios.get('http://localhost:3000/home/admin-dashboard/report',{
+      const pendingReport =await axios.get('https://cyber-crime-desk.onrender.com/home/admin-dashboard/report',{
         headers:{
           "Content-Type":"application/json"
         }

@@ -17,7 +17,7 @@ const Navbar2 = () => {
 const logoutHandle = async () =>{
 
 
-  const axiosResponse = await axios.post('http://localhost:3000/home/logout',{
+  const axiosResponse = await axios.post('https://cyber-crime-desk.onrender.com/home/logout',{
       headers: {
         'Content-Type': 'application/json'}
       })

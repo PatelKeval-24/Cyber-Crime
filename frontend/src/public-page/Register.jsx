@@ -23,7 +23,7 @@ const registerHandler= async (e)=>{
  }
  
   console.log(registerData);
-  const axiosResponse = await axios.post('http://localhost:3000/home/register', registerData , {
+  const axiosResponse = await axios.post('https://cyber-crime-desk.onrender.com/home/register', registerData , {
     headers: {
       'Content-Type': 'application/json'
     }
