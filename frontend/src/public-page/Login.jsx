@@ -18,7 +18,7 @@ export const Login = ()=> {
     const password = document.getElementById('password').value;
     // console.log("front",email, password);
 
-    const axiosResponse = await axios.post('https://cyber-crime-desk.onrender.com/home/login',{email,password},{
+    const axiosResponse = await axios.post('https://cyber-crime-desk-backend.onrender.com/home/login',{email,password},{
       headers: {
         'Content-Type': 'application/json'}
       })
@@ -31,7 +31,7 @@ export const Login = ()=> {
         const token = axiosResponse.data.token;
         // console.log('tokennn',token);
         if(token){
-          const tokenverify = await axios.post('http://localhost:3000/home/verify-token',{token:token},{
+          const tokenverify = await axios.post('https://cyber-crime-desk-backend.onrender.com/home/verify-token',{token:token},{
             headers: {
               'Content-Type': 'application/json'
             }

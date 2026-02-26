@@ -29,7 +29,7 @@ const CrimeSubmit = () => {
     // console.log(token,"jwt")
 
     // console.log(reportData)
-    const reportsended =await axios.post("https://cyber-crime-desk.onrender.com/home/crime-submit",{reportData},{
+    const reportsended =await axios.post("https://cyber-crime-desk-backend.onrender.com/home/crime-submit",{reportData},{
       headers : {
         'Content-Type': 'application/json'
       }

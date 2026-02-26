@@ -8,7 +8,7 @@ function Reports() {
   useEffect(() => {
     const getReport = async () => {
       const pendingReport = await axios.get(
-        "https://cyber-crime-desk.onrender.com/home/admin-dashboard/report",
+        "https://cyber-crime-desk-backend.onrender.com/home/admin-dashboard/report",
         {
           headers: {
             "Content-Type": "application/json",

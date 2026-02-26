@@ -9,7 +9,7 @@ export const Request = () => {
   // it show the request at admin dashboard
   useEffect(()=>{
   const getRequestHandler = async () =>{
-  const axiosResponse = await axios.get('https://cyber-crime-desk.onrender.com/home/request',
+  const axiosResponse = await axios.get('https://cyber-crime-desk-backend.onrender.com/home/request',
     {headers: {
                 'Content-Type': 'application/json'
               }})
@@ -30,7 +30,7 @@ export const Request = () => {
   const aprove = 'aproved'
 
   try {
-      const res =await  axios.post('https://cyber-crime-desk.onrender.com/home/request/approved',{name,email,aprove},
+      const res =await  axios.post('https://cyber-crime-desk-backend.onrender.com/home/request/approved',{name,email,aprove},
     {
       headers: {
                 'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ export const Request = () => {
   const email = user.email;
   const aprove = 'reject'
 
-  const res =await  axios.post('https://cyber-crime-desk.onrender.com/home/request/rejected',{name,email,aprove},
+  const res =await  axios.post('https://cyber-crime-desk-backend.onrender.com/home/request/rejected',{name,email,aprove},
     {
       headers: {
                 'Content-Type': 'application/json'
