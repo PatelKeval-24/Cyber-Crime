@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import { AuthContext } from "../../AuthContext";
 
 
-function Reports() {
+function AllReport() {
   const [report, setReport] = useState([]);
   const [view, setView] = useState(null);
   const token = useContext(AuthContext);
@@ -27,7 +28,7 @@ function Reports() {
 
   const reportApproved = async (r) =>{
    const id = r._id
-   const report = await axios.patch("http://localhost:3000/home/admin-dashboard/repor-approved",{id},{ withCredentials: true},{
+   const report = await axios.patch("http://localhost:3000/home/admin-dashboard/repor-approved",{id},{
     headers :{
       "Content-Type":"application/json",
       Authorization :token.token
@@ -92,7 +93,9 @@ function Reports() {
                 {r.description}
               </h1>
             </div>
-            
+            <div>
+              <h1 className="text-white"> {r.submitedBy}</h1>
+            </div>
             {/* bottum part  */}
             <div className="p-2 mt-auto flex justify-between bg-gray-600/30 rounded-b-2xl border-t-2 border-gray-500 ">
               <button
@@ -102,7 +105,7 @@ function Reports() {
                 View
               </button>
               <div className="">
-                <button  className=" mr-3 pr-2 pl-2 text-white text-sm border-2 border-rose-400 bg-rose-400/40 rounded-2xl ">
+                <button  className=" mr-3 pr-2 pl-2 text-white text-sm border-2 border-rose-400 bg-rose-400/40 rounded-2xl  w-">
                   Reject
                 </button>
                 <button onClick={() => reportApproved(r)} className="mr-2 pr-2 pl-2 text-white text-sm border-2 border-green-400 bg-green-400/20 rounded-2xl  w-">
@@ -224,4 +227,6 @@ function Reports() {
   );
 }
 
-export default Reports;
+
+
+export default AllReport

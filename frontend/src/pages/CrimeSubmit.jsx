@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React,{useContext, useRef} from "react";
 import axios from 'axios';
 import { AuthContext } from "../AuthContext";
 
@@ -7,6 +7,7 @@ const CrimeSubmit = () => {
   const inputStyle = "p-1  bg-gray-200 border-2 border-gray-500 rounded-lg "
   const hedingStyle = "text-white text-center font-bold p-3"
   const token = useContext(AuthContext);
+  const formRef = useRef()
   
   const reportsHandler =async (e) =>{
     e.preventDefault();
@@ -23,18 +24,23 @@ const CrimeSubmit = () => {
       crimeCategory : form.crimeCategory.value,
       priority : form.priority.value,
       location : form.location.value,
+      crimeDate : form.crimeDate.value,
       description : form.dtext.value,
       token:token
     }
     // console.log(token,"jwt")
 
     // console.log(reportData)
-    const reportsended =await axios.post("http://localhost:3000/home/crime-submit",{reportData},{
+    const reportsended =await axios.post("http://localhost:3000/home/crime-submit",{reportData},{ withCredentials: true},{
       headers : {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization :token.token
       }
     })
     console.log(reportsended)
+    alert("report submited ")
+    formRef.current.reset();
+
 
   }
 
@@ -46,7 +52,7 @@ const CrimeSubmit = () => {
         <h1 className="text-white  text-2xl font-bold text-center">
           Crime Submit
         </h1>
-      <form onSubmit={reportsHandler} className="flex bg-blue-300/20 m-15 border rounded-3xl">
+      <form ref={formRef} onSubmit={reportsHandler} className="flex bg-blue-300/20 m-15 border rounded-3xl">
         
         <div className="w-1/2 p-5 flex flex-col gap-3   hover:bg-blue-400">
           <h1 className={hedingStyle} >Victim Information</h1>

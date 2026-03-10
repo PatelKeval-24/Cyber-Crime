@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState , useContext } from 'react'
 import axios from 'axios'
+import { AuthContext } from '../../AuthContext'
 
 function ReportAccessedLog() {
 const [report , setReport] = useState([])
+const token = useContext(AuthContext)
   useEffect( () =>{
     const getReport =async () =>{
     
-      const pendingReport =await axios.get('http://localhost:3000/home/admin-dashboard/report',{
+      const pendingReport =await axios.get('http://localhost:3000/home/admin-dashboard/report',{ withCredentials: true},{
         headers:{
-          "Content-Type":"application/json"
+          "Content-Type":"application/json",
+          Authorization :token
         }
       })
       console.log(pendingReport.data.pendingReport,'pending report');

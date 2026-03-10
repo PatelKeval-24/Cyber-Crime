@@ -1,14 +1,17 @@
 import rect,{useContext} from 'react'
 import { AuthContext } from './AuthContext'
-import { replace } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
 
 
 const ProtectedRoute = ({children, roles}) => {
 
-  const {role , loginStatus} =useContext(AuthContext)
+  const {role , loginStatus,loading} =useContext(AuthContext)
   console.log("protected route : ", roles, role)
+
+  if (loading) {
+    return <div>Loading...</div>;   // wait until auth check finishes
+  }
 
   if(!loginStatus){
     return <Navigate to='/home/login' replace />;
@@ -16,14 +19,10 @@ const ProtectedRoute = ({children, roles}) => {
   if(!roles.includes(role)){
    return <Navigate to='/unauthorized' replace />;
 
-  }else{
-    if(role === 'admin'){
-     <Navigate to='/home/admin-dashboard'  replace />;
-    }else{
-      <Navigate to='/home/volunteer-dashboard' replace />;
-    } 
-    return children; 
   }
+
+  return children; 
+  
 
 }
 

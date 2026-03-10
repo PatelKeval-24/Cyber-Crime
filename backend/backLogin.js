@@ -1,5 +1,5 @@
-import { connectDB, getDB } from './db.js';
-connectDB();
+import { getDB } from './db.js';
+
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -18,7 +18,7 @@ const dbresult2 = await db.collection('admin').findOne({ email: email})
   // console.log(email,password)
   if (dbresult2.email === email && dbresult2.password === password){ 
     // console.log(dbresult2 , "admin ---")
-          const token = jwt.sign({ email: email,role:"admin",name : dbresult2.name }, "secretkey", { expiresIn: '1h' });
+          const token = jwt.sign({ email: email,role:"admin",name : dbresult2.name },process.env.JWTKEY, { expiresIn: '1h' });
           res.cookie('token', token, {
             httpOnly: true,
             secure: false, // Set to true in production with HTTPS
@@ -27,7 +27,7 @@ const dbresult2 = await db.collection('admin').findOne({ email: email})
           res.status(200).json({ 
             success: true, 
             message: 'Login successful',
-            token: token
+            token:token
           });
         }else if(!dbresult2.email && !dbresult2.password ){
           res.status(401).json({ 
@@ -51,7 +51,7 @@ const backLoginHandle = app.post('/home/login', async (req, res) => {
 
         // password and email check
         if (dbresult.email === email && await bcrypt.compare(password, dbresult.hashPassword) && dbresult.status === "approved"){
-          const token = jwt.sign({ email: email,role:"volunteer",name : dbresult.name}, "secretkey", { expiresIn: '1h' });
+          const token = jwt.sign({ email: email ,role:"volunteer",name : dbresult.name}, "secretkey", { expiresIn: '1h' });
           res.cookie('token', token, {
             httpOnly: true,
             secure: false, // Set to true in production with HTTPS
@@ -71,9 +71,10 @@ const backLoginHandle = app.post('/home/login', async (req, res) => {
 
 })
 
-const verifyTokenFunction =  async (req, res, next) => {
+export const verifyTokenFunction =  async (req, res, next) => {
+  // console.log("verifyToken",req);
   // console.log("verifyToken",req.body.token);
-  const tokenVerify = req.body.token;
+  const tokenVerify = req.cookies.token;
 
   if (!tokenVerify) {
     return res.status(401).json({ success: false, message: 'No token provided' });

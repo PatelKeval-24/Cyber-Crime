@@ -1,8 +1,28 @@
 // import body1 from "../assets/body1.jpg"
 import Crimetypes from "./Crimetypes";
-import icon from '../img/lock.png'
+import { useEffect,useState } from "react";
+import axios from "axios";
+
 
 const Body1 = () => {
+/// ip location vpn 
+
+
+  // const [userData, setUserData] = useState(null);
+  //   const [loading, setLoading] = useState(true);
+  
+  //   useEffect(() => {
+  //     fetch('http://localhost:3000/api/user-info'{ withCredentials: true},)
+  //       .then(res => res.json())
+  //       .then(data => {
+  //         setUserData(data);
+  //         setLoading(false);
+  //       })
+  //       .catch(err => {
+  //         console.error("Error fetching IP info:", err);
+  //         setLoading(false);
+  //       });
+  //   }, []);
   return (
     <>
    

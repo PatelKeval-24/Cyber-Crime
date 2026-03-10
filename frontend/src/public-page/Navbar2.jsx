@@ -17,7 +17,7 @@ const Navbar2 = () => {
 const logoutHandle = async () =>{
 
 
-  const axiosResponse = await axios.post('http://localhost:3000/home/logout',{
+  const axiosResponse = await axios.post('http://localhost:3000/home/logout',{ withCredentials: true},{
       headers: {
         'Content-Type': 'application/json'}
       })

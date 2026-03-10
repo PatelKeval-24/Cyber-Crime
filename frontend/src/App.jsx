@@ -4,7 +4,7 @@ import CrimeInfo from "./public-page/CrimeInfo";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import CrimeSubmit from "./pages/crimeSubmit";
+import CrimeSubmit from "./pages/CrimeSubmit";
 import CrimeRepository from "./pages/CrimeRepository";
 import { Login } from "./public-page/Login";
 import Register from "./public-page/Register";
@@ -13,7 +13,7 @@ import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import Unauthorize from "./public-page/Unauthorize";
 import AdminDashboard from "./pages/AdminComponent/AdminDashboard";
-import VolunteerDashboard from "./pages/VolunteerDashboard";
+import VolunteerDashboard from "./pages/VolunteerDashboard/VolunteerDashboard";
 import Overview from "./pages/AdminComponent/Overview";
 import {Request} from "./pages/AdminComponent/Request";
 
@@ -22,6 +22,11 @@ import MakeAdmin from "./pages/AdminComponent/MakeAdmin";
 import Reports from "./pages/AdminComponent/Reports";
 import ReportAccessedLog from "./pages/AdminComponent/ReportAccesedLog";
 import AuditLog from "./pages/AdminComponent/AuditLog";
+import MyInvestigation from "./pages/VolunteerDashboard/myInvestigation";
+import AllReport from "./pages/VolunteerDashboard/allReport";
+import axios from 'axios'
+
+axios.defaults.withCredentials = true;
 
 function App() {
   return (
@@ -56,7 +61,13 @@ function App() {
                   <VolunteerDashboard />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route index element={<Overview/>}/>
+                <Route path="all-reports" element={<AllReport/>}/>
+                <Route path="my-investigation" element={<MyInvestigation/>}/>
+                
+
+            </Route>
             <Route
               path="/home/admin-dashboard"
               element={

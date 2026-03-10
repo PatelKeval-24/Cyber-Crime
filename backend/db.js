@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
-const url = 'mongodb://localhost:27017';
+const url = process.env.URL || 'mongodb+srv://Cyber-Crime:Cyber-Crime@cybercrime.x57ijnd.mongodb.net/';
 const client = new MongoClient(url);
-const dbName = 'cyberCrime'; 
+const dbName = process.env.DBNAME || 'cyberCrime'; 
 let db;
 
 const connectDB = async () => {

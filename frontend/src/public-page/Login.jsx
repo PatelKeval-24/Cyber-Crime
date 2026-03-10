@@ -18,22 +18,22 @@ export const Login = ()=> {
     const password = document.getElementById('password').value;
     // console.log("front",email, password);
 
-    const axiosResponse = await axios.post('http://localhost:3000/home/login',{email,password},{
+    const axiosResponse = await axios.post('http://localhost:3000/home/login',{email,password},{ withCredentials: true},{
       headers: {
         'Content-Type': 'application/json'}
       })
-      console.log(axiosResponse.data);
-      console.log(axiosResponse.cooki);
+      // console.log(axiosResponse.data);
+      console.log(axiosResponse);
 
       if(axiosResponse.data.success){
         alert("Login Successful: " + axiosResponse.data.message);
        
         const token = axiosResponse.data.token;
-        // console.log('tokennn',token);
+        console.log('tokennn',token);
         if(token){
-          const tokenverify = await axios.post('http://localhost:3000/home/verify-token',{token:token},{
+          const tokenverify = await axios.post('http://localhost:3000/home/verify-token',{ withCredentials: true},{
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
             }
           })
           console.log("token data",tokenverify.data);
@@ -44,6 +44,8 @@ export const Login = ()=> {
             // console.log(tokenverify.data.user.name)
             tokeninfo(token)
             login(tokenverify.data.user);
+            console.log(tokenverify.data.user,'verify mynk');
+            
             navigate(`/home/${tokenverify.data.user.role}-dashboard`);
           }else{
             alert("Token verification failed: " + tokenverify.data.message);

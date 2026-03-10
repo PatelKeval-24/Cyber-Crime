@@ -1,9 +1,10 @@
-import React, { createContext, useState, useContext } from "react";
-
+import React, { createContext, useState, useContext ,useEffect } from "react";
+import axios from 'axios'
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [loginStatus , setloginStatus] = useState(false)
+  const [loading, setLoading] = useState(true); 
   const [role , setRole] = useState(null)
   // console.log(role, 'let role')
   const [name , setName] = useState(null);
@@ -13,6 +14,30 @@ export const AuthProvider = ({ children }) => {
       setToken(token);
   } 
   // console.log(token,"jwt")
+
+  useEffect(() => {
+
+    axios.get("http://localhost:3000/home/verify-token", {
+      withCredentials: true
+    })
+    .then(res => {
+
+      setRole(res.data.user.role);
+      setName(res.data.user.name);
+      setloginStatus(true);
+
+    })
+    .catch(() => {
+
+      setloginStatus(false);
+
+    })
+    .finally(() => {
+      setLoading(false);   // ⭐ stop loading
+    });
+
+  }, []);
+
   const login = (user) => {
     setRole(user.role)
     setName(user.name)
@@ -27,9 +52,9 @@ export const AuthProvider = ({ children }) => {
 
 
 
-console.log('login out', role)
+// console.log('login out', role)
   return (
-    <AuthContext.Provider value={{ loginStatus, login, logout, role , name , token ,tokeninfo }}>
+    <AuthContext.Provider value={{ loginStatus, login, logout, role , name , token ,tokeninfo,loading }}>
       {" "}
       {children}{" "}
     </AuthContext.Provider>
