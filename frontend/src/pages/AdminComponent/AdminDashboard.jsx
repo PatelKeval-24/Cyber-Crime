@@ -1,58 +1,80 @@
 import react, { useContext } from "react"
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
 
+const navLinks = [
+  { to: "",                    label: "Dashboard",          icon: "⊞" },
+  { to: "Request",             label: "Request",            icon: "📥" },
+  { to: "Volunteer",           label: "Volunteer",          icon: "🙌" },
+  { to: "Make-admin",          label: "Make Admin",         icon: "🛡️" },
+  { to: "Bloack-volunteer",    label: "Block Volunteer",    icon: "🚫" },
+  { to: "reports",             label: "Reports",            icon: "📋" },
+  { to: "Report-Accessed-log", label: "Report Access Log",  icon: "🗒️" },
+  { to: "Audit-logs",          label: "Audit Logs",         icon: "🔎" },
+  { to: "Dishable-Account",    label: "Disable Account",    icon: "⛔" },
+];
+
 const AdminDashboard = () => {
-const {name} = useContext(AuthContext)
+  const { name } = useContext(AuthContext);
+  const location = useLocation();
 
   return (
-    <div className="bg-gray-900 h-full ">
-     
-      {/* admin menu */}
-      <div className="">
-        <div className=" fixed w-64 bg-[#111827] h-[calc(100vh-4rem)]x">
-          <h1 className="text-white text-center p-2 h-10 m-5 bg-purple-700">{name}</h1>
+    <div className="flex bg-slate-950 min-h-screen pt-[53px]">
 
-          <div className="flex flex-col gap-4 mt-4 ml-4 w-6/7">
-              <Link to='' className=" text-white rounded-2xl bg-blue-600  p-2 transition duration-300 ease-in-out transform hover:scale-110  shadow-[0_0_20px_3px_rgba(96,165,250,0.4)] ">
-                Dashboard
-              </Link>
-              <Link to='Request' className="text-white rounded-2xl bg-blue-600 p-2 transition duration-300 ease-in-out transform hover:scale-110  shadow-[0_0_20px_3px_rgba(96,165,250,0.4)]">
-                Request
-              </Link>
-              <Link to='Volunteer' className="text-white rounded-2xl bg-blue-600 p-2 transition duration-300 ease-in-out transform hover:scale-110  shadow-[0_0_20px_3px_rgba(96,165,250,0.4)]">
-                Volunteer
-              </Link>
-              <Link to='Make-admin' className="text-white rounded-2xl bg-blue-600 p-2 transition duration-300 ease-in-out transform hover:scale-110  shadow-[0_0_20px_3px_rgba(96,165,250,0.4)]">
-                Make admin
-              </Link>
-              <Link to='Bloack-volunteer' className="text-white rounded-2xl bg-blue-600 p-2 transition duration-300 ease-in-out transform hover:scale-110  shadow-[0_0_20px_3px_rgba(96,165,250,0.4)]">
-                Bloack volunteer
-              </Link>
-              <Link to='reports' className="text-white rounded-2xl bg-blue-600 p-2 transition duration-300 ease-in-out transform hover:scale-110  shadow-[0_0_20px_3px_rgba(96,165,250,0.4)]">
-                Reports
-              </Link>
-              <Link to='Report-Accessed-log' className="text-white rounded-2xl bg-blue-600 p-2 transition duration-300 ease-in-out transform hover:scale-110  shadow-[0_0_20px_3px_rgba(96,165,250,0.4)]">
-                Report Accessed log
-              </Link>
-              <Link to='Audit-logs' className="text-white rounded-2xl bg-blue-600 p-2 transition duration-300 ease-in-out transform hover:scale-110  shadow-[0_0_20px_3px_rgba(96,165,250,0.4)]">
-                Audit logs
-              </Link>
-              <Link to='Dishable-Account' className="text-white rounded-2xl bg-blue-600 p-2 transition duration-300 ease-in-out transform hover:scale-110  shadow-[0_0_20px_3px_rgba(96,165,250,0.4)]">
-                Dishable Account
-              </Link>
-            
+      {/* ── sidebar ── */}
+      <aside className="fixed top-[53px] left-0 w-60 h-[calc(100vh-53px)] bg-[#070b12] border-r border-white/6 flex flex-col z-30 overflow-y-auto">
+
+        {/* user badge */}
+        <div className="px-4 py-4 border-b border-white/6">
+          <div className="flex items-center gap-3 bg-sky-500/8 border border-sky-500/15 rounded-xl px-3 py-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500 to-indigo-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+              {name?.[0]?.toUpperCase() || "A"}
+            </div>
+            <div className="min-w-0">
+              <p className="text-white text-sm font-semibold truncate">{name}</p>
+              <p className="text-sky-400 text-[10px] font-mono tracking-wider">Administrator</p>
+            </div>
           </div>
         </div>
-        {/* display content */}
-        <div className="ml-64 bg-neutral-950 min-h-screen p-6">
-        <Outlet/>
+
+        {/* nav links */}
+        <nav className="flex flex-col gap-1 px-3 py-4 flex-1">
+          <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-slate-700 px-2 mb-2">Menu</p>
+          {navLinks.map(({ to, label, icon }) => {
+            const segment = location.pathname.split("/").pop();
+            const isActive = to === ""
+              ? segment === "admin-dashboard" || location.pathname.endsWith("admin-dashboard")
+              : segment === to;
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150
+                  ${isActive
+                    ? "bg-sky-500/15 text-sky-300 border border-sky-500/25"
+                    : "text-slate-500 hover:text-slate-200 hover:bg-white/4 border border-transparent"
+                  }`}
+              >
+                <span className="text-sm leading-none w-5 text-center">{icon}</span>
+                {label}
+                {isActive && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-sky-400" />}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* footer */}
+        <div className="px-4 py-3 border-t border-white/6">
+          <p className="font-mono text-[10px] text-slate-700 text-center tracking-widest uppercase">Admin Panel</p>
         </div>
-      </div>
+      </aside>
+
+      {/* ── main ── */}
+      <main className="ml-60 flex-1 min-h-[calc(100vh-53px)] bg-slate-950 p-6">
+        <Outlet />
+      </main>
     </div>
   );
 };
-
-
 
 export default AdminDashboard;

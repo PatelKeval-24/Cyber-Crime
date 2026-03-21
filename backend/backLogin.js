@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import express from 'express';
+
 var app = express();
 app.use(express.json());
 
@@ -22,7 +23,7 @@ const dbresult2 = await db.collection('admin').findOne({ email: email})
           res.cookie('token', token, {
             httpOnly: true,
             secure: false, // Set to true in production with HTTPS
-            maxAge: 3600000 // 1 hour
+            maxAge: 3600000*24 // 1 day
           })
           res.status(200).json({ 
             success: true, 
@@ -37,7 +38,7 @@ const dbresult2 = await db.collection('admin').findOne({ email: email})
     }
 
 
-const backLoginHandle = app.post('/home/login', async (req, res) => {
+const backLoginHandle =  async (req, res) => {
     if (req.method === 'POST') {
         const { email, password } = req.body;
         // console.log("back",email, password);
@@ -69,13 +70,14 @@ const backLoginHandle = app.post('/home/login', async (req, res) => {
         }
     }
 
-})
+}
 
-export const verifyTokenFunction =  async (req, res, next) => {
+const verifyTokenFunction =  async (req, res, next) => {
   // console.log("verifyToken",req);
-  // console.log("verifyToken",req.body.token);
+  // console.log("verifyToken",req.cookies.token);
   const tokenVerify = req.cookies.token;
-
+  // console.log(tokenVerify,'empty or not ');
+  
   if (!tokenVerify) {
     return res.status(401).json({ success: false, message: 'No token provided' });
   }
@@ -87,19 +89,21 @@ export const verifyTokenFunction =  async (req, res, next) => {
 
     req.user = decoded;
     // console.log("req.user2",req.user);
+    res.json({ success: true, message: 'Access granted to protected route', user: req.user });
     next();
   } catch (err) {
     return res.status(401).json({ success: false, message: 'Invalid token----' });
   }
 };
 
-const verifyToken = app.use('/home/verify-token', verifyTokenFunction, (req, res) => {
+const verifyToken = app.get("/home/verify-token", verifyTokenFunction, (req, res) => {
+  // console.log(req.user,'in token verification')
   res.json({ success: true, message: 'Access granted to protected route', user: req.user });
 });
-
-const logoutHandle = app.use('/home/logout', (req, res) => {
+ 
+const logoutHandle =  (req, res) => {
   res.clearCookie('token').json({ success: true, message: 'Logout successful' }); 
   // console.log('logged out')
-});
-
+};
+ 
 export { verifyToken, logoutHandle, backLoginHandle };

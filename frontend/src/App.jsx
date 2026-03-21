@@ -97,3 +97,55 @@ function App() {
 }
 
 export default App;
+// const getCompleteDetails = async () => {
+//     // A. System & Browser (Client Hints)
+//     let uaData = {};
+//     if (navigator.userAgentData) {
+//         uaData = await navigator.userAgentData.getHighEntropyValues([
+//             "architecture", "bitness", "model", "platformVersion", "fullVersionList"
+//         ]);
+//     }
+
+//     // B. Graphics (WebGL)
+//     const canvas = document.createElement('canvas');
+//     const gl = canvas.getContext('webgl');
+//     const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+//     const gpu = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "Unknown GPU";
+
+//     // C. Network
+//     const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+//     // D. Battery
+//     let battery = {};
+//     if (navigator.getBattery) {
+//         const b = await navigator.getBattery();
+//         battery = { level: b.level * 100 + "%", charging: b.charging };
+//     }
+
+//     let data = {
+//         system: {
+//             os: uaData.platform,
+//             osVersion: uaData.platformVersion,
+//             arch: uaData.architecture,
+//             ram: navigator.deviceMemory + "GB",
+//             cores: navigator.hardwareConcurrency
+//         },
+//         browser: {
+//             name: uaData.brands?.[0]?.brand,
+//             version: uaData.fullVersionList?.[0]?.version,
+//             language: navigator.language
+//         },
+//         graphics: {
+//             gpu: gpu,
+//             screen: `${window.screen.width}x${window.screen.height}`,
+//             pixelRatio: window.devicePixelRatio
+//         },
+//         network: {
+//             type: conn?.effectiveType,
+//             downlink: conn?.downlink + "Mbps",
+//             saveData: conn?.saveData
+//         },
+//         state: battery
+//     };
+//     console.log('device data', data)
+// };

@@ -5,11 +5,12 @@ import axios from 'axios';
 
 
 
+
 import { getDB } from './db.js';
 
 
-
-const backRegisterHandle = app.use('/home/register', async (req,res)=>{
+// router.post('/crime-submit', upload.single('evidence'), backReport);
+const backRegisterHandle = async (req,res)=>{
     
     const {name,email,contectNumber, role = "volunteer",status = "pending",address,password,registerTime} = req.body;
     //// data inserting in to the database 
@@ -31,8 +32,8 @@ const backRegisterHandle = app.use('/home/register', async (req,res)=>{
             let Longitude = '73.1222'
             const location = await axios.get(`https://us1.locationiq.com/v1/reverse?key=${token}&lat=${Latitude}&lon=${Longitude}&format=json&`)
             // console.log("location22",location.data)
-            console.log("location22",location.data.display_name)
-            console.log("location22",location.data.address)
+            // console.log("location22",location.data.display_name)
+            // console.log("location22",location.data.address)
             const userRegisterLocation=location.data.display_name;
             const objUserRegisterLocation=location.data.address;
             try{
@@ -55,7 +56,7 @@ const backRegisterHandle = app.use('/home/register', async (req,res)=>{
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
-})
+}
 
 
 export default backRegisterHandle;

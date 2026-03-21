@@ -2,8 +2,10 @@ import React, { useContext, useEffect, useState ,useRef} from 'react'
 import axios from 'axios'
 import { AuthContext } from '../AuthContext'
 
+
 const CrimeRepository = () => {
 const [report , setReport] = useState([])
+
 const [view , setView] = useState(null)
 const [loading , setLoading] = useState(true)
 const token = useContext(AuthContext)
@@ -35,15 +37,25 @@ const investigation = async (r) =>{
       Authorization :token.token
     }
    })
-   console.log("reoprt assigned",report)
-   console.log(report.data.message);
+  //  console.log("reoprt assigned",report)
+  //  console.log(report.data.message);
    
    if (report.data.status === "succes"){
     alert(report.data.message)
    }else{
     alert(report.data.message)
-   }
-    
+    console.log(report.data.message,'alert')
+   }   
+}
+const joinJnvestigation = async (r) =>{
+  const id = r._id;
+  const report = await axios.patch("http://localhost:3000/home/crime-repository/joininvestigation",{id,token},{withCredentials: true},{
+    headers :{
+      "Content-Type":"application/json",
+      Authorization :token.token
+    }
+  })
+
 }
 
   return (
@@ -107,9 +119,16 @@ const investigation = async (r) =>{
                 View
               </button>
               <div className="">
+                {r.status === "Open" ? 
                 <button onClick={() =>investigation(r)} className="mr-2 pr-2 pl-2 text-white text-sm border-2 border-green-400 bg-green-400/20 rounded-2xl ">
                   Investigate
+                </button> :
+                <button onClick={() =>joinJnvestigation(r)} className="mr-2 pr-2 pl-2 text-white text-sm border-2 border-green-400 bg-green-400/20 rounded-2xl ">
+                  Join Investigate
                 </button>
+                }
+
+
               </div>
             </div>
           </div>
@@ -205,10 +224,14 @@ const investigation = async (r) =>{
             {/* bottum part  */}
             <div className="p-2 mt-auto flex justify-end bg-neutral-900/90 rounded-b-2xl border-t-2 border-gray-500 ">
               <div className="">
-                
-                <button className="mr-2 pr-2 pl-2 text-white text-sm border-2 border-green-400 bg-green-400/20 rounded-2xl  w-">
+                {view.status === "Open" ? 
+                <button onClick={() =>investigation(r)} className="mr-2 pr-2 pl-2 text-white text-sm border-2 border-green-400 bg-green-400/20 rounded-2xl ">
                   Investigate
+                </button> :
+                <button onClick={() =>investigation(r)} className="mr-2 pr-2 pl-2 text-white text-sm border-2 border-green-400 bg-green-400/20 rounded-2xl ">
+                  Join Investigate
                 </button>
+                }
                 <button
                 onClick={() => setView(null)}
                 className="pr-4 pl-4 text-white text-sm border-2 border-gray-400 bg-gray-900/60 rounded-2xl "

@@ -2,13 +2,14 @@ import express from 'express';
 var app = express();
 import cors from 'cors';
 import backRegisterHandle from './backRegister.js';
-import { verifyToken, logoutHandle, backLoginHandle, verifyTokenFunction } from './backLogin.js';
-import { aprovedBack, getRequestHandler, rejectBack, volunteerData } from './Oprequest.js';
-import {approvedReport, backReport, gaveApprovedReport, giveReports, investigate, myIvestigation} from './backReports.js';
+import { verifyToken, logoutHandle, backLoginHandle } from './backLogin.js';
+import { aprovedBack, getRequestHandler, makeAdmin, makeAdminFromVolunteer, rejectBack, volunteerData } from './Oprequest.js';
+import {uploadFields,approvedReport, backReport, gaveApprovedReport, giveReports, investigate, joinInvestigation, myIvestigation, draftReport, getDraftReport, addEvidance, saveReport} from './backReports.js';
 import requestIp from "request-ip";
 import axios from 'axios';
 import cookieParser from "cookie-parser";
-import {connectDB} from './db.js'
+import {connectDB} from './db.js';
+import multer from 'multer';
 
 connectDB();
 const PORT =process.env.PORT || 3000;
@@ -24,11 +25,13 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 
+// const upload = multer({ storage: multer.memoryStorage() });
 
-app.use(backRegisterHandle);
-app.use(backLoginHandle);
+
+app.post("/home/register",backRegisterHandle);
+app.post('/home/login',backLoginHandle);
 app.use(verifyToken);
-app.use(logoutHandle);
+app.get('/home/logout',logoutHandle);
 
 app.get("/home/request",verifyToken, getRequestHandler);
 
@@ -38,18 +41,39 @@ app.post("/home/request/rejected",verifyToken, rejectBack);
 
 app.get("/home/admin-dashboard/volunteer",verifyToken, volunteerData);
 
-app.post("/home/crime-submit",verifyToken, backReport );
+
+app.get("/home/admin-dashboard/make-admin",verifyToken, makeAdmin);
+
+app.post("/home/admin-dashboard/make-admin/approved-to-admin",verifyToken, makeAdminFromVolunteer);
+
+// const upload = multer({ storage: multer.memoryStorage() });
+
+// Add the middleware before your controller
+// router.post('/crime-submit', backReport);
+app.post("/home/crime-submit",verifyToken, uploadFields, backReport );
 
 app.get("/home/admin-dashboard/report",verifyToken, giveReports);
 
-app.patch("/home/admin-dashboard/repor-approved",verifyToken, approvedReport);
+app.patch("/home/admin-dashboard/repot-approved",verifyToken, approvedReport); 
 
 app.get("/home/crime-repository" ,verifyToken, gaveApprovedReport);
 
 app.patch("/home/crime-repository/investigation",verifyToken,investigate);
 
+app.patch("/home/crime-repository/joininvestigation",verifyToken,joinInvestigation);
+
 app.get("/home/volunteer-dashboard/myinvestigation",verifyToken,myIvestigation);
+
+// const reportDraft = multer({ dest: "reportDraft/" });
+app.post("/home/volunteer-dashboard/myinvestigation/saved",verifyToken,addEvidance ,draftReport);
+
+app.get("/home/volunteer-dashboard/myinvestigation/saved/:reportId",verifyToken,getDraftReport);
+
+app.get("/home/volunteer-dashboard/myinvestigation/submit/:reportId",verifyToken,saveReport)
+
 }
+
+
 app.post("/userInfo", async(req ,res) =>{
 
  console.log("request header",req.headers)
@@ -81,10 +105,11 @@ app.post("/userInfo", async(req ,res) =>{
 
 })
 
+
 ///////////////////////// ip address and isp and location 
 app.get('/api/user-info', async (req, res) => {
     // 1. Get client IP (handles proxies/load balancers)
-    const clientIp = '152.59.36.71' || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const clientIp = '152.59.34.136' || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     try {
         // 2. Fetch ISP and Location info using a Geolocation API
@@ -106,16 +131,16 @@ app.get('/api/user-info', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 
-    // try {
-    //     const token = 'pk.38b7eb673f5d6468f4e6417008f4a665';
-    //     let Latitude = '21.133514'
-    //     let Longitude = '73.1222'
-    //     const location = await axios.get(`https://us1.locationiq.com/v1/reverse?key=${token}&lat=${Latitude}&lon=${Longitude}&format=json&`)
-    //     console.log("location22",location.data)
+    try {
+        const token = 'pk.38b7eb673f5d6468f4e6417008f4a665';
+        let Latitude = '21.1414356722688'
+        let Longitude = '72.78052985867461'
+        const location = await axios.get(`https://us1.locationiq.com/v1/reverse?key=${token}&lat=${Latitude}&lon=${Longitude}&format=json&`)
+        console.log("location22",location.data)
         
-    // } catch (error) {
-    //   console.log(error)  
-    // }
+    } catch (error) {
+      console.log(error)  
+    }
     
 
 //////////////////////////////////////////////////////////

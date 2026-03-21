@@ -1,6 +1,6 @@
 import {useContext} from 'react'
 import { AuthContext } from '../AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 
@@ -26,18 +26,17 @@ export const Login = ()=> {
       console.log(axiosResponse);
 
       if(axiosResponse.data.success){
-        alert("Login Successful: " + axiosResponse.data.message);
-       
+        
         const token = axiosResponse.data.token;
-        console.log('tokennn',token);
+        // console.log('tokennn',token);
         if(token){
-          const tokenverify = await axios.post('http://localhost:3000/home/verify-token',{ withCredentials: true},{
+          const tokenverify = await axios.get('http://localhost:3000/home/verify-token',{ withCredentials: true},{
             headers: {
               'Content-Type': 'application/json',
             }
           })
           console.log("token data",tokenverify.data);
-          // console.log("token role",tokenverify.data.user.role);
+          console.log("token role",tokenverify.data.user.role);
           if(tokenverify.data.success === true && tokenverify.data.user.role){
             // const role = tokenverify.data.user.role;
             // console.log(tokenverify.data.user.role)
@@ -46,6 +45,7 @@ export const Login = ()=> {
             login(tokenverify.data.user);
             console.log(tokenverify.data.user,'verify mynk');
             
+            alert("Login Successful: " + axiosResponse.data.message);
             navigate(`/home/${tokenverify.data.user.role}-dashboard`);
           }else{
             alert("Token verification failed: " + tokenverify.data.message);
@@ -76,7 +76,8 @@ export const Login = ()=> {
           <input type="password" id="password" name="password" placeholder='Password' className='border-b-2 rounded-md'/>
           </div>
 
-          <button onClick={handleLogin} className='border-2 border-gray-300 rounded-md m-2 p-2 w-24'>Login</button>
+          <button onClick={handleLogin} className='border-none rounded-md m-2 p-2 w-24 bg-gray-900/40 '>Login</button>
+          <p>If you do not have account.<Link className='text-black-300 underline underline-offset-2' to="/home/register">Register</Link></p>
         </div>
       </div>
     </>
