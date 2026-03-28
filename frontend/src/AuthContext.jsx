@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext ,useEffect } from "react";
-import axios from 'axios'
+import axios from 'axios';
+import { socket } from "./public-page/socket";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -48,6 +49,16 @@ export const AuthProvider = ({ children }) => {
   };
   const logout = () => {
     setloginStatus(false);
+    // 1. Tell the server to set status to offline
+    // socket.userEmail is already stored on the server from the login
+    socket.disconnect(); 
+    
+    // 2. Clear local states
+    setToken(null);
+    setUser(null);
+    
+    // 3. Reconnect for the next user (clean slate)
+    socket.connect();
   };
 
 

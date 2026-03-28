@@ -1,5 +1,9 @@
 import {getDB} from './db.js'
 
+////////////////////////////////
+// ip information & device information
+
+
 ////////////////////////////
 // volunteer frist register log
 

@@ -26,13 +26,36 @@ import MyInvestigation from "./pages/VolunteerDashboard/myInvestigation";
 import AllReport from "./pages/VolunteerDashboard/allReport";
 import axios from 'axios'
 
-axios.defaults.withCredentials = true;
+import ForgotPassword from "./forgot";
+
+import { io } from "socket.io-client";
+import { useEffect,useContext } from "react";
+import { AuthContext } from "./AuthContext";
+import { socket } from './public-page/socket'; // Recommended to keep socket in its own file
+
+// axios.defaults.withCredentials = true;
+// const socket = io("http://localhost:3000", { withCredentials: true });
+
+function SocketHandler() {
+  const { user } = useContext(AuthContext); // Now this works!
+
+  useEffect(() => {
+    if (user && user.email) {
+      socket.emit('go-online', user.email);
+    }
+  }, [user]);
+
+  return null; // This component doesn't need to render anything
+}
 
 function App() {
+
+  
   return (
     <>
       <BrowserRouter>
         <AuthProvider>
+          <SocketHandler /> {/* This handles the connection */}
           <Navbar2 />
           {/* </AuthProvider> */}
           <Routes>
@@ -87,6 +110,8 @@ function App() {
             <Route path="/home/login" element={<Login />} />
             <Route path="/home/register" element={<Register />} />
             <Route path="/unauthorized" element={<Unauthorize/>} />
+
+            <Route path="/home/forgot" element={<ForgotPassword/>}/>
 
             <Route path="*" element={<Unauthorize />}/>
           </Routes>

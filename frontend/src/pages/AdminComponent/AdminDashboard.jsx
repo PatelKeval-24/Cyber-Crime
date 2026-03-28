@@ -8,8 +8,8 @@ const navLinks = [
   { to: "Volunteer",           label: "Volunteer",          icon: "🙌" },
   { to: "Make-admin",          label: "Make Admin",         icon: "🛡️" },
   { to: "Bloack-volunteer",    label: "Block Volunteer",    icon: "🚫" },
-  { to: "reports",             label: "Reports",            icon: "📋" },
-  { to: "Report-Accessed-log", label: "Report Access Log",  icon: "🗒️" },
+  { to: "reports",             label: "Pending Reports",            icon: "📋" },
+  { to: "Report-Accessed-log", label: "Submited repots",  icon: "🗒️" },
   { to: "Audit-logs",          label: "Audit Logs",         icon: "🔎" },
   { to: "Dishable-Account",    label: "Disable Account",    icon: "⛔" },
 ];

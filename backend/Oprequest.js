@@ -16,7 +16,7 @@ export const getRequestHandler = (async (req , res)=>{
   });
 
 ////////////////////////////////////////////////////////////
-
+// volunteer approved 
 export const aprovedBack = ( async (req , res) => {
   console.log("back start")
   const db = getDB();
@@ -38,24 +38,6 @@ export const aprovedBack = ( async (req , res) => {
 res.status(200).send('volunteer Approved  succesfully..');
 
 })
-
-
-///////////////////////////////////////////////////////////
-
-export const rejectBack = ( async (req , res) => {
-  console.log("back start")
-  const db = getDB();
-  const collection = db.collection('volunteer');
-
-  const statusAproved = await collection.updateOne({email:email},{
-    $set:{
-      status : "aproved"
-    }
-  })
-
- console.log("data is get it",req.body , req.header)
-})
-
 
 ////////////////////////////////////////////////////
 // volunteer data gettin from back-end

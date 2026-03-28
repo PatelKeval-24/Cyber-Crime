@@ -38,11 +38,33 @@ function Reports() {
     };
     getReport();
   }, []);
-
+  // report approved function
   const reportApproved = async (r) => {
     const id = r._id;
     const report = await axios.patch(
       "http://localhost:3000/home/admin-dashboard/repot-approved",
+      { id },
+      { withCredentials: true },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.token,
+        },
+      }
+    );
+    console.log(report);
+    if (report.data.status === "succes") {
+      setReport((prev) => prev.filter((report) => report._id !== r._id));
+      alert(report.data.message);
+    } else {
+      alert(report.data.message);
+    }
+  };
+  // report reject function
+  const reportRejected = async (r) => {
+    const id = r._id;
+    const report = await axios.patch(
+      "http://localhost:3000/home/admin-dashboard/repot-rejected",
       { id },
       { withCredentials: true },
       {
@@ -124,7 +146,7 @@ function Reports() {
 
               {/* priority + submitted by row */}
               <div className="flex justify-between border-b border-white/6 pb-2">
-                <span className="text-slate-500 text-xs font-mono">by {r.submitedBy}</span>
+                <span className="text-slate-500 text-xs font-mono">Submited by {r.submitedBy}</span>
               </div>
 
               {/* description */}
@@ -141,8 +163,8 @@ function Reports() {
               >
                 View
               </button>
-              <div className="flex gap-2">
-                <button className="px-4 py-1.5 rounded-xl text-sm font-medium text-rose-300 bg-rose-500/15 border border-rose-500/30 hover:bg-rose-500/25 transition-all cursor-pointer">
+              <div  className="flex gap-2">
+                <button onClick={() => reportRejected(r)} className="px-4 py-1.5 rounded-xl text-sm font-medium text-rose-300 bg-rose-500/15 border border-rose-500/30 hover:bg-rose-500/25 transition-all cursor-pointer">
                   Reject
                 </button>
                 <button
@@ -227,11 +249,11 @@ function Reports() {
             </div>
 
             {/* modal footer */}
-            <div className="flex justify-end gap-2 px-6 py-4 border-t border-white/7 bg-black/20 rounded-b-2xl">
-              <button className="px-4 py-2 rounded-xl text-sm font-semibold text-rose-300 bg-rose-500/15 border border-rose-500/30 hover:bg-rose-500/25 transition-all cursor-pointer">
+            <div  className="flex justify-end gap-2 px-6 py-4 border-t border-white/7 bg-black/20 rounded-b-2xl">
+              <button onClick={() => reportRejected(r)} className="px-4 py-2 rounded-xl text-sm font-semibold text-rose-300 bg-rose-500/15 border border-rose-500/30 hover:bg-rose-500/25 transition-all cursor-pointer">
                 Reject
               </button>
-              <button className="px-4 py-2 rounded-xl text-sm font-semibold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all cursor-pointer">
+              <button onClick={() => reportApproved(r)} className="px-4 py-2 rounded-xl text-sm font-semibold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all cursor-pointer">
                 Approve
               </button>
               <button

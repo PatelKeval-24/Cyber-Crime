@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer from 'multer';
-import { log } from 'console';
+
 
 // 1. Cloudinary Configuration
 cloudinary.config({
@@ -49,8 +49,9 @@ export const uploadFields = multer({ storage: storage }).fields([
 
 export const backReport = async (req,res) =>{
   // console.log('Request Body:', req.body);
-  // console.log('Files Received:', req.files);
-
+  console.log('Files Received:', req.cookies);
+  const decoded = jwt.verify(req.cookies.token, process.env.JWTKEY ||"secretkey");
+  
   try {
     const db = getDB();
 
@@ -79,7 +80,8 @@ export const backReport = async (req,res) =>{
       crimeDate, description 
     } = req.body;
     // user information 
-    // const submitedBy =
+    const submitedByName = decoded.name;
+    const submitedByEmail = decoded.email;
 
     // 4. Construct Separated Document Structure
     const newReport = {
@@ -96,6 +98,8 @@ export const backReport = async (req,res) =>{
         priority,
         crimeDate,
         location,
+        submitedBy:submitedByName,
+        submitedByEmail:submitedByEmail,
         description,
       // SEPARATED FILES
       evidenceFiles: evidenceList,      // Array of URLs
@@ -409,42 +413,83 @@ console.log(reportGet,'getting the report');
 
 //////////////////////////////////////////////////////////////
 // submit the report 
-export const saveReport = async (req ,res ) =>{
-  const delate = async (reportId) =>{
-    try {
-      const InvestigationReport = await db.collection('investigation').deleteOne({ 
-        reportId: req.params.reportId});
-      const report = await db.collection('report').DeteleOne({ 
-        reportId:reportId });
-      
-    } catch (error) {
-      console.log(error)
-    }
-  }
+export const saveReport = async (req, res) => {
   try {
     const db = getDB();
-    const { reportId } = new ObjectId(req.params.reportId);
+    const reportIdParam = req.params.reportId;
+    const token = req.cookies.token;
 
+    const submited = jwt.verify(token, process.env.JWTKEY ||"secretkey");
+
+    const finalSubmitedBy = submited.name;
+    const finalSubmitedEmail = submited.email;
+
+    // Correct way to handle ObjectId
+    const idObject = new ObjectId(reportIdParam);
+
+    // 1. Fetch the data
     const InvestigationReport = await db.collection('investigation').findOne({ 
-      reportId: req.params.reportId});
+      reportId: reportIdParam 
+    });
+    
     const report = await db.collection('report').findOne({ 
-      reportId:reportId });
-      // console.log(reportId);
-      // console.log(report);
-      try {
-        const submited = await db.collection('submited').insertOne({InvestigationReport,report});
+      _id: idObject // Use _id if reportId is the primary key in 'report' collection
+    });
 
-        res.send(200).json({success:true,
-          message:"Report has been submited.."})
-      } catch (error) {
-        console.log(error)
-        res.send(200).json({success:true,
-          message:error})
-      }
-      delate(reportId);
+    if (!InvestigationReport || !report) {
+      return res.status(404).json({ success: false, message: "Records not found" });
+    }
+
+    // 2. Insert into submitted collection
+    await db.collection('submited').insertOne({ 
+      InvestigationReport, 
+      report,
+      submittedAt: new Date(),
+      finalSubmitedBy,
+      finalSubmitedEmail
+    });
+
+    // 3. Delete the old records after successful submission
+    await db.collection('investigation').deleteOne({ reportId: reportIdParam });
+    await db.collection('report').deleteOne({ _id: idObject });
+
+    // 4. Send the final response (Use .status(200).json, NOT .send(200).json)
+    return res.status(200).json({
+      success: true,
+      message: "Report has been submitted successfully."
+    });
+
   } catch (error) {
-    console.log(error);
-     res.send(200).json({success:true,
-          message:error})
+    console.log("Error in saveReport:", error);
+    
+    // Only send error if we haven't sent a response yet
+    if (!res.headersSent) {
+      return res.status(500).json({ 
+        success: false, 
+        message: "Internal Server Error" 
+      });
+    }
   }
+};
+
+///////////////////////////////////////////////////////////
+// getting the final report from the db
+export const getSubmitedReport = async (req , res) =>{
+  const db = getDB();
+  try {
+  const reports = await db.collection('submited').find().toArray();
+
+  
+  res.status(200).json({
+    success:true,
+    reports:reports,
+    message:"report are send"
+  })
+  } catch (error) {
+  console.log(error);
+  res.status(200).json({
+    success:false,
+    message:error
+  })
+  } 
 }

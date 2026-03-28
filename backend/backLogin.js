@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 
 import express from 'express';
 
+
 var app = express();
 app.use(express.json());
 
@@ -41,11 +42,11 @@ const dbresult2 = await db.collection('admin').findOne({ email: email})
 const backLoginHandle =  async (req, res) => {
     if (req.method === 'POST') {
         const { email, password } = req.body;
-        // console.log("back",email, password);
+        console.log("back",email, password);
         const db = getDB();
-        // console.log(db ,"heee")
+        console.log(db ,"heee")
         const dbresult = await db.collection('volunteer').findOne({ email: email})
-        // console.log(dbresult ,"admin-----")
+        console.log(dbresult ,"admin-----")
         
         if (!dbresult) return adminLogin(db , email , password, res);
         
@@ -85,12 +86,12 @@ const verifyTokenFunction =  async (req, res, next) => {
   try {
     // console.log("tokenVerify");
 
-    const decoded = jwt.verify(tokenVerify, "secretkey");
+    const decoded = jwt.verify(tokenVerify, process.env.JWTKEY ||"secretkey");
 
     req.user = decoded;
     // console.log("req.user2",req.user);
     res.json({ success: true, message: 'Access granted to protected route', user: req.user });
-    next();
+    // next();
   } catch (err) {
     return res.status(401).json({ success: false, message: 'Invalid token----' });
   }
@@ -105,5 +106,16 @@ const logoutHandle =  (req, res) => {
   res.clearCookie('token').json({ success: true, message: 'Logout successful' }); 
   // console.log('logged out')
 };
+
+
+// // --- Helper: Setup Email Transporter ---
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: 'kp562010@gmail.com', 
+//     pass: 'Keval@2005' // Use Gmail App Password
+//   }
+// }); 
+
  
 export { verifyToken, logoutHandle, backLoginHandle };

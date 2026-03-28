@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import { AuthContext } from '../../AuthContext'
+import { socket } from '../../public-page/socket'
 
 // ── Avatar initials ──────────────────────────────────────────────────────────
 const initials = (name = '') =>
@@ -100,9 +101,12 @@ const VolunteerCard = ({ elem, index }) => {
             <p className="text-xs font-mono uppercase tracking-widest text-slate-600 mt-0.5">
               {elem.role || 'Volunteer'}
             </p>
+            
           </div>
-
+          <div className='flex flex-col gap-2'>
+          <StatusBadge status={elem.isOnline ? 'Active' : 'Inactive'} />
           <StatusBadge status={elem.status} />
+          </div>
         </div>
 
         {/* divider */}
@@ -142,6 +146,7 @@ const Skeleton = () => (
 // ── Main component ────────────────────────────────────────────────────────────
 const Volunteer = () => {
   const [volunteerData, setVolunteerData] = useState([])
+  
   const [loading, setLoading]             = useState(true)
   const [search, setSearch]               = useState('')
   const token = useContext(AuthContext)
@@ -161,7 +166,23 @@ const Volunteer = () => {
       }
     }
     volunteerGet()
-  }, [])
+  }, []);
+  // 2. Real-Time Socket Listener
+    useEffect(() => {
+        socket.on('user-status-change', (data) => {
+            const { email, isOnline } = data;
+            
+            // Update the specific volunteer in the list without refreshing the page
+            setVolunteerData((prevVolunteers) => 
+                prevVolunteers.map((vol) => 
+                    vol.email === email ? { ...vol, isOnline } : vol
+                )
+            );
+        });
+
+        // Cleanup listener when admin leaves the page
+        return () => socket.off('user-status-change');
+    }, []);
 
   const filtered = volunteerData.filter(v =>
     [v.name, v.email, v.role, v.address].some(f =>

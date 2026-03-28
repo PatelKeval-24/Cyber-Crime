@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../AuthContext";
 import axios from "axios";
+// import { socket } from "./socket";
 axios.defaults.withCredentials = true;
 
 const Navbar2 = () => {

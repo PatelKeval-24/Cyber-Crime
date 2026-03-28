@@ -3,6 +3,7 @@ import { AuthContext } from '../AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
+import { socket } from './socket';
 
 
 export const Login = ()=> {
@@ -41,6 +42,8 @@ export const Login = ()=> {
             // const role = tokenverify.data.user.role;
             // console.log(tokenverify.data.user.role)
             // console.log(tokenverify.data.user.name)
+            // This tells the AWS server "I am online" using the email
+            socket.emit('go-online', email);
             tokeninfo(token)
             login(tokenverify.data.user);
             console.log(tokenverify.data.user,'verify mynk');
@@ -78,6 +81,7 @@ export const Login = ()=> {
 
           <button onClick={handleLogin} className='border-none rounded-md m-2 p-2 w-24 bg-gray-900/40 '>Login</button>
           <p>If you do not have account.<Link className='text-black-300 underline underline-offset-2' to="/home/register">Register</Link></p>
+          <p>If you do not remember the password.<Link className='text-black-300 underline underline-offset-2' to="/home/forgot">Forgot</Link></p>
         </div>
       </div>
     </>
