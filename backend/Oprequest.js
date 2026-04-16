@@ -1,7 +1,7 @@
 import {  getDB } from './db.js';
 import { ObjectId } from 'mongodb';
-
-
+import { getAuditData } from './auditLog.js';
+// import { getUserAuditData } from './info.js';
 //////////////////////////////////////////////////////////
 
 export const getRequestHandler = (async (req , res)=>{
@@ -18,17 +18,21 @@ export const getRequestHandler = (async (req , res)=>{
 ////////////////////////////////////////////////////////////
 // volunteer approved 
 export const aprovedBack = ( async (req , res) => {
-  console.log("back start")
+  // console.log("back start")
   const db = getDB();
   const collection = db.collection('volunteer');
   const {email} = req.body;
-
+  // Call the merged function and store everything in 'fullAudit'
+    // const fullAudit = await getUserAuditData(req);
   try {
     await collection.updateOne({email:email},{
     $set:{
       status : "approved"
     }
   })
+  // Audit Log for login
+                  const action = "volutneer approved";
+                  getAuditData(req, action);
   } catch (error) {
     console.log("error in aproval",error)
   }
@@ -85,6 +89,7 @@ export const makeAdmin = (async (req,res) =>{
         res.status(200).json({
           volunteer : volunteer
         })
+        
       } catch (error) {
         console.log(error)
        res.status(200).json({
@@ -120,6 +125,9 @@ export const makeAdminFromVolunteer =async (req,res) => {
       res.status(200).json({ 
         message:'succesfully volunteer pramoted to admin'
       })
+      // Audit Log for login
+                  const action = "making the volutneer admin";
+                  getAuditData(req, action);
       try {
       const volunteer = await db.collection('volunteer').deleteOne({email:req.body.email})
       } catch (error) {

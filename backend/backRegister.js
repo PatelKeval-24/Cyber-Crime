@@ -5,13 +5,12 @@ import axios from 'axios';
 
 
 
-
 import { getDB } from './db.js';
 
 
 // router.post('/crime-submit', upload.single('evidence'), backReport);
 const backRegisterHandle = async (req,res)=>{
-    
+    console.log("Received registration data:", req.body); // Debug log  
     const {name,email,contectNumber, role = "volunteer",status = "pending",address,password,registerTime} = req.body;
     //// data inserting in to the database 
     try {
@@ -28,8 +27,8 @@ const backRegisterHandle = async (req,res)=>{
         //user location where he register
         try {
             const token = 'pk.38b7eb673f5d6468f4e6417008f4a665';
-            let Latitude = '21.133514'// get realtime value
-            let Longitude = '73.1222'
+            let Latitude = req.body.latitude || '21.133514'// get realtime value
+            let Longitude = req.body.longitude || '73.1222'
             const location = await axios.get(`https://us1.locationiq.com/v1/reverse?key=${token}&lat=${Latitude}&lon=${Longitude}&format=json&`)
             // console.log("location22",location.data)
             // console.log("location22",location.data.display_name)

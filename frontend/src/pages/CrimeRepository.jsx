@@ -57,6 +57,8 @@ const CrimeRepository = () => {
   const [priority, setPriority] = useState('All')
   const [type,     setType]     = useState('All')
   const [category, setCategory] = useState('All')
+  const [latitude, setLatitude] = useState(null) ;
+  const [longitude, setLongitude] = useState(null) ;
 
   useEffect(() => {
     const getReports = async () => {
@@ -75,10 +77,17 @@ const CrimeRepository = () => {
       <p className="text-slate-500 font-mono text-sm animate-pulse">Loading cases…</p>
     </div>
   )
+  navigator.geolocation.getCurrentPosition(async(position) => {
+      const { latitude, longitude } = position.coords;
+
+      console.log("User Location:", latitude, longitude);
+    }, (error) => {
+      console.error("User denied location access", error);
+    });
 
   const investigation = async (r) => {
     const id = r._id
-    const report = await axios.patch("http://localhost:3000/home/crime-repository/investigation", { id, token }, { withCredentials: true }, {
+    const report = await axios.patch("http://localhost:3000/home/crime-repository/investigation", { id, token,latitude,longitude }, { withCredentials: true }, {
       headers: { "Content-Type": "application/json", Authorization: token.token }
     })
     if (report.data.status === "succes") {
@@ -91,7 +100,7 @@ const CrimeRepository = () => {
 
   const joinJnvestigation = async (r) => {
     const id = r._id
-    const report = await axios.patch("http://localhost:3000/home/crime-repository/joininvestigation", { id, token }, { withCredentials: true }, {
+    const report = await axios.patch("http://localhost:3000/home/crime-repository/joininvestigation", { id, token,latitude,longitude }, { withCredentials: true }, {
       headers: { "Content-Type": "application/json", Authorization: token.token }
     })
   }

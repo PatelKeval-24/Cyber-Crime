@@ -165,6 +165,8 @@ const MakeAdmin = () => {
   const [search, setSearch]               = useState('')
   const [toast, setToast]                 = useState(null)
   const token = useContext(AuthContext)
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type })
@@ -187,11 +189,18 @@ const MakeAdmin = () => {
     }
     volunteerGet()
   }, [])
+  navigator.geolocation.getCurrentPosition(async(position) => {
+      const { latitude, longitude } = position.coords;
+
+      console.log("User Location:", latitude, longitude);
+    }, (error) => {
+      console.error("User denied location access", error);
+    });
 
   const approve = async (elem) => {
     try {
       await axios.post('http://localhost:3000/home/admin-dashboard/make-admin/approved-to-admin',
-        { name: elem.name, email: elem.email, aprove: 'aproved' },
+        { name: elem.name, email: elem.email, aprove: 'aproved', latitude, longitude },
         { headers: { 'Content-Type': 'application/json', Authorization: token.token } }
       )
       // FIXED: Changed setData to setVolunteerData

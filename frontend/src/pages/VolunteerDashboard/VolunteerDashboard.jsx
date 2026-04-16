@@ -6,7 +6,7 @@ const navLinks = [
   { to: "",                  label: "Dashboard",        icon: "⊞" },
   { to: "all-reports",       label: "All Reports",      icon: "📋" },
   { to: "my-investigation",  label: "My Investigation", icon: "🔍" },
-  { to: "Dishable-Account",  label: "Disable Account",  icon: "🚫" },
+  // { to: "Dishable-Account",  label: "Disable Account",  icon: "🚫" },
 ];
 
 const VolunteerDashboard = () => {

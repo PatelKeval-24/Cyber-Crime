@@ -17,13 +17,23 @@ function ForgotPassword() {
   const [showPass, setShowPass]         = useState(false);
   const [showConfirm, setShowConfirm]   = useState(false);
   const [otpSuccess, setOtpSuccess]     = useState(false);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
+  navigator.geolocation.getCurrentPosition(async(position) => {
+      const { latitude, longitude } = position.coords;
+
+      console.log("User Location:", latitude, longitude);
+    }, (error) => {
+      console.error("User denied location access", error);
+    });
 
   // ── original api calls unchanged ─────────────────────────────────────────
   const handleSendOtp = async () => {
     if (!email) { setEmailError("Please enter your email address."); return; }
     setEmailError("");
     setLoading(true);
-    await axios.post("http://localhost:3000/auth/forgot-password", { email });
+    await axios.post("http://localhost:3000/auth/forgot-password", { email,latitude,longitude });
     setLoading(false);
     setStep(2);
   };
@@ -32,7 +42,7 @@ function ForgotPassword() {
     // plug in your verify-otp endpoint here
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/auth/verify-otp", { email, otp });
+      const res = await axios.post("http://localhost:3000/auth/verify-otp", { email, otp,latitude,longitude });
       console.log(res.data.success)
       setOtpError("");
       setOtpSuccess(res.data.success);
@@ -51,6 +61,8 @@ function ForgotPassword() {
   //   await axios.post("http://localhost:3000/auth/forgot-password", { email });
   //   setLoading(false);
   // };
+  
+  
 
   const handleReset = async () => {
     if (newPassword !== confirmPassword) { setPassError("Passwords do not match."); return; }
@@ -58,7 +70,7 @@ function ForgotPassword() {
     setLoading(true);
     try {
       const res = await axios.post("http://localhost:3000/auth/reset-password", {
-        email, otp, newPassword
+        email, otp, newPassword,latitude,longitude
       });
       alert(res.data.message);
       // Redirect to login

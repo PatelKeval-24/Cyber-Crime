@@ -58,7 +58,7 @@ function ReportAccessedLog() {
   const againInvestigate = async (r) => {
     const id = r._id;
     const report = await axios.get(
-      "http://localhost:3000/home/admin-dashboard/againInvestigate",
+      `http://localhost:3000/home/admin-dashboard/againInvestigate/${r._id}`,
       { id }, { withCredentials: true },
       { headers: { "Content-Type": "application/json", Authorization: token.token } }
     );
@@ -120,7 +120,7 @@ function ReportAccessedLog() {
                 </div>
                 <div className="flex flex-col items-end gap-1 flex-shrink-0">
                   <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${statusBadge[r.report.status] || "bg-slate-500/15 text-slate-400 border border-slate-500/30"}`}>
-                    {r.report.status}
+                    {r.status}
                   </span>
                   <span className="text-slate-600 text-[10px] font-mono">{fmt(r.report.date)}</span>
                 </div>
@@ -202,7 +202,7 @@ function ReportAccessedLog() {
             {/* modal header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/7 sticky top-0 bg-slate-950 z-10">
               <div>
-                <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-orange-400 mb-1">Investigation Report</p>
+                <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-orange-400 mb-1">Investigation Report ({view.report._id})</p>
                 <h2 className="text-slate-100 text-xl font-bold">{view.report.name}</h2>
               </div>
               <div className="flex items-center gap-2">

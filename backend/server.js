@@ -4,7 +4,7 @@ import cors from 'cors';
 import backRegisterHandle from './backRegister.js';
 import { verifyToken, logoutHandle, backLoginHandle, } from './backLogin.js';
 import { aprovedBack, getRequestHandler, makeAdmin, makeAdminFromVolunteer, volunteerData } from './Oprequest.js';
-import {uploadFields,approvedReport, backReport, gaveApprovedReport, giveReports, investigate, joinInvestigation, myIvestigation, draftReport, getDraftReport, addEvidance, saveReport, getSubmitedReport} from './backReports.js';
+import {uploadFields,approvedReport, backReport, gaveApprovedReport, giveReports, investigate, joinInvestigation, myIvestigation, draftReport, getDraftReport, addEvidance, saveReport, getSubmitedReport, againInvestigate, leaveInvestigation} from './backReports.js';
 import requestIp from "request-ip";
 import axios from 'axios';
 import cookieParser from "cookie-parser";
@@ -15,6 +15,8 @@ import { forgotPassword, updatePassword, verifyOTP } from './backGmail.js';
 
 import http from 'http'; // Add this
 import { Server } from 'socket.io'; // Add this
+import { getAuditLogsFromDB } from './auditLog.js';
+import { getCount, updateProfile } from './backDashboard.js';
 
 connectDB();
 const PORT =process.env.PORT || 3000;
@@ -71,6 +73,9 @@ app.patch("/home/crime-repository/investigation",verifyToken,investigate);
 
 app.patch("/home/crime-repository/joininvestigation",verifyToken,joinInvestigation);
 
+app.patch("/home/crime-repository/leaveinvestigation",verifyToken,leaveInvestigation);
+
+
 app.get("/home/volunteer-dashboard/myinvestigation",verifyToken,myIvestigation);
 
 // const reportDraft = multer({ dest: "reportDraft/" });
@@ -79,6 +84,14 @@ app.post("/home/volunteer-dashboard/myinvestigation/saved",verifyToken,addEvidan
 app.get("/home/volunteer-dashboard/myinvestigation/saved/:reportId",verifyToken,getDraftReport);
 
 app.get("/home/volunteer-dashboard/myinvestigation/submit/:reportId",verifyToken,saveReport)
+
+app.get("/home/admin-dashboard/againInvestigate/:reportId",verifyToken,againInvestigate);
+
+app.get("/home/admin-dashboard/audit-logs",verifyToken,getAuditLogsFromDB);
+
+app.get("/home/admin-dashboard/profile",verifyToken,getCount);
+
+app.post("/home/admin-dashboard/profile/update",verifyToken,updateProfile);
 
 }
 

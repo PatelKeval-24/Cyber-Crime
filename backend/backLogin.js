@@ -1,23 +1,23 @@
 import { getDB } from './db.js';
-
+import { getAuditData } from './auditLog.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import express from 'express';
-
-
+import e from 'express';
+ 
 var app = express();
 app.use(express.json());
 
-const adminLogin = async(db , email , password, res) =>{
+const adminLogin = async( db , email , password, res,req) =>{
 
 const dbresult2 = await db.collection('admin').findOne({ email: email})
 // console.log(dbresult2 , "admin")
   if (!dbresult2) {
     return res.status(401).json({ success: false, message: 'Invalid email or password' });
   }
-  // console.log(dbresult2.email,dbresult2.password,dbresult2 , "admin")
-  // console.log(email,password)
+  console.log(dbresult2.email,dbresult2.password,dbresult2 , "admin")
+  console.log(email,password)
   if (dbresult2.email === email && dbresult2.password === password){ 
     // console.log(dbresult2 , "admin ---")
           const token = jwt.sign({ email: email,role:"admin",name : dbresult2.name },process.env.JWTKEY, { expiresIn: '1h' });
@@ -31,24 +31,23 @@ const dbresult2 = await db.collection('admin').findOne({ email: email})
             message: 'Login successful',
             token:token
           });
-        }else if(!dbresult2.email && !dbresult2.password ){
-          res.status(401).json({ 
-            success: false, 
-            message: 'Invalid email or password' });
-        }
+          // Audit Log for login
+          const action = "User Login";
+          getAuditData(req, action, email);
+        }// If it reaches here, it's a failure. No need for complex "else if"
+return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
-
 
 const backLoginHandle =  async (req, res) => {
     if (req.method === 'POST') {
         const { email, password } = req.body;
         console.log("back",email, password);
         const db = getDB();
-        console.log(db ,"heee")
+        // console.log(db ,"heee")
         const dbresult = await db.collection('volunteer').findOne({ email: email})
-        console.log(dbresult ,"admin-----")
+        // console.log(dbresult ,"admin-----")
         
-        if (!dbresult) return adminLogin(db , email , password, res);
+        if (!dbresult) return adminLogin(db , email , password, res ,req);
         
 
         // password and email check
@@ -64,11 +63,13 @@ const backLoginHandle =  async (req, res) => {
             message: 'Login successful',
             token: token
           });
-        }else if(!dbresult.email && !dbresult.hashPassword || dbresult.password === password){
-          res.status(401).json({ 
-            success: false, 
-            message: 'Invalid email or password' });
+          // Audit Log for login
+          const action = "User Login";
+          getAuditData(req, action,email);
+
         }
+        // If it reaches here, it's a failure. No need for complex "else if"
+return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
 }

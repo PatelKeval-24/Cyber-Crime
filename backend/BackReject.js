@@ -1,6 +1,7 @@
 import { getDB } from './db.js';
 import { ObjectId } from "mongodb";
 import jwt from 'jsonwebtoken';
+import { getAuditData } from './auditLog.js';
 
 //////////////////////////////////////////////////
 // reject the volunnter request
@@ -16,6 +17,9 @@ export const rejectBack = async (req,res) =>{
       status : "rejected"
     }
   })
+  // Audit Log for login
+                  const action = "volunteer rejected";
+                  getAuditData(req, action);
   } catch (error) {
     console.log("error in aproval",error)
   }
@@ -45,6 +49,9 @@ export const rejectedReport = async (req ,res) =>{
       message : "report rejected succesfully..  ."
     })
     console.log("status ",updateReportstatus);
+    // Audit Log for login
+                  const action = "report rejected";
+                  getAuditData(req, action);
     
   } catch (error) {
     console.log(error);

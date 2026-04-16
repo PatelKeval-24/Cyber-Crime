@@ -9,6 +9,7 @@ function MyInvestigation() {
   const [loading, setLoading] = useState(true);
   const [report, setReport] = useState([]);
   const [summary, setSummary] = useState("");
+  const token2 = useContext(AuthContext);
   const navigate = useNavigate();
   
   // submit report handeller
@@ -33,6 +34,49 @@ function MyInvestigation() {
     alert("Error submitting report");
   }
   }
+
+  const handleLeaveInvestigation = async () => {
+  // Check if there is a 'view' or 'report' selected to get the ID
+  if (!view || !view._id) {
+    alert("No investigation selected");
+    return;
+  }
+
+  // Confirmation dialog is best practice for "Leave" actions
+  if (!window.confirm("Are you sure you want to leave this investigation?")) {
+    return;
+  }
+
+  try {
+    // Assuming 'token' and 'name' are available in your component state or context
+    // We match the structure your backend expects: { id, token: { token, name } }
+    const requestBody = {
+      id: view._id,
+      token: token2
+    };
+
+    const res = await axios.patch(
+      'http://localhost:3000/home/crime-repository/leaveinvestigation',
+      requestBody,
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (res.data.success) {
+      alert("You have successfully left the investigation.");
+      // Optional: Navigate away or refresh the list
+      // navigate('/home/volunteer-dashboard');
+    }
+  } catch (err) {
+    console.error("Error leaving investigation:", err);
+    
+    // Check if the backend sent a specific error message
+    const errorMessage = err.response?.data?.message || "Error leaving investigation";
+    alert(errorMessage);
+  }
+};
 
   // saving 
   const handleSaveReport = async () => {
@@ -316,7 +360,7 @@ function MyInvestigation() {
                   >
                     Edit
                   </button>
-                  <button className="text-rose-300 text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-400/40 bg-rose-400/10 hover:bg-rose-400/20 hover:border-rose-400/70 transition-all duration-200 cursor-pointer">
+                  <button onClick={handleLeaveInvestigation} className="text-rose-300 text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-400/40 bg-rose-400/10 hover:bg-rose-400/20 hover:border-rose-400/70 transition-all duration-200 cursor-pointer">
                     Leave
                   </button>
                 </div>
@@ -622,7 +666,7 @@ function MyInvestigation() {
                   </button>
                 </div>
                 <div className="flex gap-2.5">
-                  <button className="text-rose-300 text-xs font-semibold px-3.5 py-1.5 rounded-lg border border-rose-400/40 bg-rose-400/10 hover:bg-rose-400/20 hover:border-rose-400/70 transition-all duration-200 cursor-pointer">
+                  <button onClick={handleLeaveInvestigation} className="text-rose-300 text-xs font-semibold px-3.5 py-1.5 rounded-lg border border-rose-400/40 bg-rose-400/10 hover:bg-rose-400/20 hover:border-rose-400/70 transition-all duration-200 cursor-pointer">
                     Leave
                   </button>
                   <button onClick={handleSubmit} className="text-emerald-300 text-xs font-semibold px-3.5 py-1.5 rounded-lg border border-emerald-400/40 bg-emerald-400/10 hover:bg-emerald-400/20 hover:border-emerald-400/70 transition-all duration-200 cursor-pointer">

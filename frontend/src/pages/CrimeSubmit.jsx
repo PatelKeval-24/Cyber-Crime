@@ -22,6 +22,8 @@ const CrimeSubmit = () => {
   const videoRef = useRef();
   const [isVerifying, setIsVerifying] = useState(false);
   const [userPhoto, setUserPhoto] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null); 
 
   // 1. Load Models (Do this in useEffect)
   useEffect(() => {
@@ -138,8 +140,16 @@ const CrimeSubmit = () => {
       // Append the identity photo
       formData.append("userPhoto", photoBlob, "identity_check.jpg");
 
+      navigator.geolocation.getCurrentPosition(async(position) => {
+      const { latitude, longitude } = position.coords;
+
+      console.log("User Location:", latitude, longitude);
+    }, (error) => {
+      console.error("User denied location access", error);
+    });
+
       // 5. Submit to Backend
-      await axios.post("http://localhost:3000/home/crime-submit", formData, {
+      await axios.post("http://localhost:3000/home/crime-submit", formData,{latitude,longitude}, {
         headers: { Authorization: token.token },
         withCredentials: true,
       });

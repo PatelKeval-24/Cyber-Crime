@@ -22,15 +22,24 @@ const registerHandler= async (e)=>{
   alert("Password and Confirm Password do not match");
   return;
  }
- 
-  console.log(registerData);
-  const axiosResponse = await axios.post('http://localhost:3000/home/register', registerData , {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  console.log(axiosResponse.data);
-  alert(axiosResponse.data);
+
+    navigator.geolocation.getCurrentPosition(async(position) => {
+        const { latitude, longitude } = position.coords;
+        registerData.latitude = latitude;
+        registerData.longitude = longitude;
+        console.log("User Location:", latitude, longitude);
+        console.log(registerData);
+        const axiosResponse = await axios.post('http://localhost:3000/home/register', registerData , {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        console.log(axiosResponse.data);
+        alert(axiosResponse.data);
+        form.reset(); // Clear the form after successful submission
+    }, (error) => {
+        console.error("User denied location access", error);
+    });
 
 }
   return (
@@ -58,11 +67,11 @@ const registerHandler= async (e)=>{
       </div>
       <div className='mb-4 justify-center items-center border-2 border-gray-300 rounded-md p-2 '>
         <label htmlFor="password" className='text-blue-300'>User Password :</label>
-        <input type="text" id='password' name='password' placeholder='User Password' className='border-b-2 rounded-md text-blue-200'/>
+        <input type="password" id='password' name='password' placeholder='User Password' className='border-b-2 rounded-md text-blue-200'/>
       </div>
        <div className='mb-4 justify-center items-center border-2 border-gray-300 rounded-md p-2 '>
         <label htmlFor="password2" className='text-blue-300'>Confirm Password :</label>
-        <input type="text" id='password2' name='password2' placeholder='Confirm Password' className='border-b-2 rounded-md text-blue-200'/>
+        <input type="password" id='password2' name='password2' placeholder='Confirm Password' className='border-b-2 rounded-md text-blue-200'/>
       </div>
       <button type='submit' className='border-2 border-gray-300 rounded-md m-2 p-2 w-24'>Register</button>
      </form>

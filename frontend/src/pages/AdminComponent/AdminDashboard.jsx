@@ -7,11 +7,12 @@ const navLinks = [
   { to: "Request",             label: "Request",            icon: "📥" },
   { to: "Volunteer",           label: "Volunteer",          icon: "🙌" },
   { to: "Make-admin",          label: "Make Admin",         icon: "🛡️" },
-  { to: "Bloack-volunteer",    label: "Block Volunteer",    icon: "🚫" },
+  
+  { to: "My-Investigation",  label: "My Investigation", icon: "🔍" },
   { to: "reports",             label: "Pending Reports",            icon: "📋" },
   { to: "Report-Accessed-log", label: "Submited repots",  icon: "🗒️" },
   { to: "Audit-logs",          label: "Audit Logs",         icon: "🔎" },
-  { to: "Dishable-Account",    label: "Disable Account",    icon: "⛔" },
+  // { to: "Dishable-Account",    label: "Disable Account",    icon: "⛔" },
 ];
 
 const AdminDashboard = () => {

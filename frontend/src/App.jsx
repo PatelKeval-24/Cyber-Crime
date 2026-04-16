@@ -102,6 +102,7 @@ function App() {
                 <Route path="Request" element={<Request/>}/>
                 <Route path="Volunteer" element={<Volunteer/>}/>
                 <Route path="make-admin" element={<MakeAdmin/>}/>
+                <Route path="my-investigation" element={<MyInvestigation/>}/>
                 <Route path="reports" element={<Reports/>}/>
                 <Route path="report-accessed-log" element={<ReportAccessedLog/>}/>
                 <Route path="audit-logs" element={<AuditLog/>}/>

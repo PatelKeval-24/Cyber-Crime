@@ -145,6 +145,8 @@ export const Request = () => {
   const [search, setSearch]   = useState('')
   const [toast, setToast]     = useState(null)
   const token = useContext(AuthContext)
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type })
@@ -170,7 +172,7 @@ export const Request = () => {
   const approve = async (user) => {
     try {
       await axios.post('http://localhost:3000/home/request/approved',
-        { name: user.name, email: user.email, aprove: 'aproved' },
+        { name: user.name, email: user.email, aprove: 'aproved', latitude, longitude },
         { headers: { 'Content-Type': 'application/json', Authorization: token.token } }
       )
       setData(prev => prev.filter(d => d._id !== user._id))
@@ -180,11 +182,19 @@ export const Request = () => {
       showToast('Failed to approve request', 'error')
     }
   }
+  //////////////// get user location when admin approve or reject the request
+  navigator.geolocation.getCurrentPosition(async(position) => {
+      const { latitude, longitude } = position.coords;
+
+      console.log("User Location:", latitude, longitude);
+    }, (error) => {
+      console.error("User denied location access", error);
+    });
 
   const reject = async (user) => {
     try {
       await axios.post('http://localhost:3000/home/request/rejected',
-        { name: user.name, email: user.email, aprove: 'reject' },
+        { name: user.name, email: user.email, aprove: 'reject', latitude, longitude  },
         { headers: { 'Content-Type': 'application/json', Authorization: token.token } }
       )
       setData(prev => prev.filter(d => d._id !== user._id))

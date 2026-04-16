@@ -1,4 +1,4 @@
-import {useContext} from 'react'
+import {useContext,useState} from 'react'
 import { AuthContext } from '../AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -9,6 +9,8 @@ import { socket } from './socket';
 export const Login = ()=> {
   const { login } = useContext(AuthContext);
   const { tokeninfo } = useContext(AuthContext);
+  const [longitude, setLongitude] = useState(null);
+  const [latitude, setLatitude] = useState(null);
 
   const navigate = useNavigate()
   async function handleLogin (e) {
@@ -19,19 +21,29 @@ export const Login = ()=> {
     const password = document.getElementById('password').value;
     // console.log("front",email, password);
 
-    const axiosResponse = await axios.post('http://localhost:3000/home/login',{email,password},{ withCredentials: true},{
+    navigator.geolocation.getCurrentPosition(async(position) => {
+      const { latitude, longitude } = position.coords;
+
+      console.log("User Location:", latitude, longitude);
+    }, (error) => {
+      console.error("User denied location access", error);
+    });
+    try {
+    const axiosResponse = await axios.post('http://localhost:3000/home/login',{email,password,latitude,longitude},{
+      withCredentials: true,
       headers: {
         'Content-Type': 'application/json'}
       })
       // console.log(axiosResponse.data);
-      console.log(axiosResponse);
+      console.log(axiosResponse , 'login worked');
 
       if(axiosResponse.data.success){
         
         const token = axiosResponse.data.token;
         // console.log('tokennn',token);
         if(token){
-          const tokenverify = await axios.get('http://localhost:3000/home/verify-token',{ withCredentials: true},{
+          const tokenverify = await axios.get('http://localhost:3000/home/verify-token',{
+            withCredentials: true,
             headers: {
               'Content-Type': 'application/json',
             }
@@ -55,8 +67,20 @@ export const Login = ()=> {
           }
         }
         
-      }else{
-        alert("Login Failed: " + axiosResponse.data.message);
+      }
+    }catch (error) {
+        // This code runs if the backend sends 401, 404, 500, etc.
+    if (error.response) {
+      // The server responded with a status code (like 401)
+      alert("Login Failed: " + error.response.data.message);
+    } else if (error.request) {
+      // The request was made but no response was received (Server down)
+      alert("No response from server. Please check if your backend is running.");
+    } else {
+      // Something happened in setting up the request
+      alert("Error: " + error.message);
+    }
+    console.error("Axios Error Details:", error);
       }
     
   }

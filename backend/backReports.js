@@ -296,6 +296,40 @@ export const joinInvestigation = async (req , res) =>{
   }
 }
 
+////////////////////////////////////////////////////////////////////////////
+// leave the investigation at crime-repository
+export const leaveInvestigation = async (req, res) => {
+  const db = getDB();
+  console.log(req.body.token.token,'token ')
+  
+  try {
+    const reportId = req.body.id;
+    // Decode the token to get the user's email
+    const decoded = jwt.verify(req.body.token.token, process.env.JWTKEY || "secretkey");
+    const userEmail = decoded.email;
+
+    // Use $pull to remove the object from the array that matches the email
+    const result = await db.collection('investigation').updateOne(
+      { reportId },
+      { 
+        $pull: { 
+          nameOfInvestigator: { email: userEmail } 
+        } 
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      res.status(200).json({ success: true, message: "Successfully left the investigation" });
+    } else {
+      res.status(404).json({ success: false, message: "You are not part of this investigation" });
+    }
+
+  } catch (error) {
+    console.error("Error leaving investigation:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
 
 
 
@@ -436,7 +470,7 @@ export const saveReport = async (req, res) => {
       _id: idObject // Use _id if reportId is the primary key in 'report' collection
     });
 
-    if (!InvestigationReport || !report) {
+    if (!InvestigationReport && !report) {
       return res.status(404).json({ success: false, message: "Records not found" });
     }
 
@@ -444,6 +478,7 @@ export const saveReport = async (req, res) => {
     await db.collection('submited').insertOne({ 
       InvestigationReport, 
       report,
+      status:"closed",
       submittedAt: new Date(),
       finalSubmitedBy,
       finalSubmitedEmail
@@ -492,4 +527,32 @@ export const getSubmitedReport = async (req , res) =>{
     message:error
   })
   } 
+}
+
+////////////////////////////////////////////////////////////////////
+/// function that triger when user click  on the need more investigation 
+export const againInvestigate = async (req , res) => {
+  try {
+    const reportID = new ObjectId(req.params.reportId) ;
+    const db = getDB();
+    console.log(reportID,'report id ')
+    const reportAgain =  await db.collection('submited').findOne({_id:reportID})
+    // console.log(report)
+    const {InvestigationReport,report,submittedAt} = reportAgain;
+    try {
+      if(!report) return res.status(404).json({ success: false, message: "Records not found" });
+      const update = await db.collection('submited').updateOne({_id:reportID},{
+        $set:{
+         "status" :"Under Investigation"
+        }
+      })
+      // const addMyInvestigation = await db.collection('report').insertOne(report)
+      console.log('add to report again investigation')
+    } catch (error) {
+      console.log(error)
+    }
+     
+  } catch (error) {
+    console.log(error)
+  }
 }
