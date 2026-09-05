@@ -218,9 +218,9 @@ const AuditLog = () => {
             </h1>
             <p className="text-slate-500 text-sm mt-1">Full chain of custody — every action, device, and network trace.</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-slate-300 bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
+          {/* <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-slate-300 bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
             ⬇ Export CSV
-          </button>
+          </button> */}
         </div>
         <div className="h-0.5 w-12 mt-3 rounded-full bg-gradient-to-r from-red-500 to-transparent" />
       </div>

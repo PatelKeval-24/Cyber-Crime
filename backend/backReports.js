@@ -291,8 +291,16 @@ export const joinInvestigation = async (req , res) =>{
         nameOfInvestigator
       }
     })
+    res.status(200).json({
+      status : "succes",
+      message : "You have joined the investigation succesfully"
+    })
   } catch (error) {
     console.log(error);
+    res.status(200).json({
+      status : "faild",
+      message:  error
+    })
   }
 }
 

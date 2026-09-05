@@ -100,9 +100,14 @@ const CrimeRepository = () => {
 
   const joinJnvestigation = async (r) => {
     const id = r._id
-    const report = await axios.patch("http://localhost:3000/home/crime-repository/joininvestigation", { id, token,latitude,longitude }, { withCredentials: true }, {
-      headers: { "Content-Type": "application/json", Authorization: token.token }
-    })
+    try {
+      const report = await axios.patch("http://localhost:3000/home/crime-repository/joininvestigation", { id, token,latitude,longitude }, { withCredentials: true }, {
+        headers: { "Content-Type": "application/json", Authorization: token.token }
+      })
+      alert(report.data.message)
+    } catch (error) {
+      alert('Error joining investigation')
+    }
   }
 
   // dynamic options

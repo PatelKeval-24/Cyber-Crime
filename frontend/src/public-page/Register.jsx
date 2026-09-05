@@ -76,7 +76,7 @@ const registerHandler= async (e)=>{
       <button type='submit' className='border-2 border-gray-300 rounded-md m-2 p-2 w-24'>Register</button>
      </form>
       </div>
-      <p  className="text-amber-50">If have the account.<Link to="/home/login" className="underline underline-offset-2">Login</Link></p>
+      <p  className="text-amber-50">If You have the account.<Link to="/home/login" className="underline underline-offset-2">Login</Link></p>
     </div>
     </div>
       

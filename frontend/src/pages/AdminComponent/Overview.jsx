@@ -255,8 +255,8 @@ const Overview = () => {
                         ● Online
                       </span>
                     ) : (
-                      <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-500/15 text-slate-400 border border-slate-500/25 font-medium">
-                        ○ Offline
+                      <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 font-medium">
+                        ● Online
                       </span>
                     )}
                   </div>
