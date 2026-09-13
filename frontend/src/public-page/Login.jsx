@@ -6,6 +6,7 @@ axios.defaults.withCredentials = true;
 import { socket } from './socket';
 
 
+
 export const Login = ()=> {
   const { login } = useContext(AuthContext);
   const { tokeninfo } = useContext(AuthContext);
@@ -29,7 +30,7 @@ export const Login = ()=> {
       console.error("User denied location access", error);
     });
     try {
-    const axiosResponse = await axios.post('http://localhost:3000/home/login',{email,password,latitude,longitude},{
+    const axiosResponse = await axios.post(`${process.env.BACKEND_URL}/home/login`,{email,password,latitude,longitude},{
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'}
@@ -42,7 +43,8 @@ export const Login = ()=> {
         const token = axiosResponse.data.token;
         // console.log('tokennn',token);
         if(token){
-          const tokenverify = await axios.get('http://localhost:3000/home/verify-token',{
+          console.log('tokennn',token);
+          const tokenverify = await axios.get(`${process.env.BACKEND_URL}/home/verify-token`,{
             withCredentials: true,
             headers: {
               'Content-Type': 'application/json',

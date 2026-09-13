@@ -12,7 +12,7 @@ const Navbar2 = () => {
   const navigate = useNavigate();
 
   const logoutHandle = async () => {
-    const axiosResponse = await axios.get("http://localhost:3000/home/logout", { withCredentials: true }, {
+    const axiosResponse = await axios.get(`${process.env.BACKEND_URL}/home/logout`, { withCredentials: true }, {
       headers: { "Content-Type": "application/json" },
     });
     logout();

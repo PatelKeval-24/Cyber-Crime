@@ -177,7 +177,7 @@ const MakeAdmin = () => {
     const volunteerGet = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:3000/home/admin-dashboard/make-admin',
+          `${process.env.BACKEND_URL}/home/admin-dashboard/make-admin`,
           { withCredentials: true, headers: { 'Content-Type': 'application/json', Authorization: token.token } }
         )
         setVolunteerData(response.data.volunteer)
@@ -199,7 +199,7 @@ const MakeAdmin = () => {
 
   const approve = async (elem) => {
     try {
-      await axios.post('http://localhost:3000/home/admin-dashboard/make-admin/approved-to-admin',
+      await axios.post(`${process.env.BACKEND_URL}/home/admin-dashboard/make-admin/approved-to-admin`,
         { name: elem.name, email: elem.email, aprove: 'aproved', latitude, longitude },
         { headers: { 'Content-Type': 'application/json', Authorization: token.token } }
       )

@@ -12,7 +12,8 @@ function AllReport() {
   useEffect(() => {
     const getReport = async () => {
       const pendingReport = await axios.get(
-        "http://localhost:3000/home/admin-dashboard/report",{ withCredentials: true},
+        `${process.env.BACKEND_URL}/home/admin-dashboard/report`,
+        { withCredentials: true},
         {
           headers: {
             "Content-Type": "application/json",
@@ -28,7 +29,8 @@ function AllReport() {
 
   const reportApproved = async (r) =>{
    const id = r._id
-   const report = await axios.patch("http://localhost:3000/home/admin-dashboard/repor-approved",{id},{
+   console.log(id);
+   const report = await axios.patch(`${process.env.BACKEND_URL}/home/admin-dashboard/repor-approved`,{id},{
     headers :{
       "Content-Type":"application/json",
       Authorization :token.token

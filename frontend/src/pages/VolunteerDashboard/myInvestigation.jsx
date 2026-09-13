@@ -20,7 +20,7 @@ function MyInvestigation() {
     formData.append("reportId", view._id);
 
     const res = await axios.get(
-      `http://localhost:3000/home/volunteer-dashboard/myinvestigation/submit/${view._id}`,
+      `${process.env.BACKEND_URL}/home/volunteer-dashboard/myinvestigation/submit/${view._id}`,
       formData,
       {
         withCredentials: true,
@@ -56,7 +56,7 @@ function MyInvestigation() {
     };
 
     const res = await axios.patch(
-      'http://localhost:3000/home/crime-repository/leaveinvestigation',
+      `${process.env.BACKEND_URL}/home/crime-repository/leaveinvestigation`,
       requestBody,
       {
         withCredentials: true,
@@ -100,7 +100,7 @@ function MyInvestigation() {
   formData.append("existingEvidence", JSON.stringify(existingEvidence));
 
     const res = await axios.post(
-      "http://localhost:3000/home/volunteer-dashboard/myinvestigation/saved",
+      `${process.env.BACKEND_URL}/home/volunteer-dashboard/myinvestigation/saved`,
       formData,
       {
         withCredentials: true,
@@ -143,7 +143,7 @@ function MyInvestigation() {
     console.log(token);
     const getReport = async () => {
       const myReport = await axios.get(
-        "http://localhost:3000/home/volunteer-dashboard/myinvestigation",
+        `${process.env.BACKEND_URL}/home/volunteer-dashboard/myinvestigation`,
         { withCredentials: true },
         {
           headers: {
@@ -165,7 +165,7 @@ function MyInvestigation() {
     try {
       // 1. Call the API for the "Saved" collection (Collection B)
       const res = await axios.get(
-        `http://localhost:3000/home/volunteer-dashboard/myinvestigation/saved/${view._id}`,
+        `${process.env.BACKEND_URL}/home/volunteer-dashboard/myinvestigation/saved/${view._id}`,
         { withCredentials: true }
       );
 

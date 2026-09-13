@@ -156,7 +156,7 @@ export const Request = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/home/request', {
+        const res = await axios.get(`${process.env.BACKEND_URL}/home/request`, {
           headers: { 'Content-Type': 'application/json', Authorization: token.token }
         })
         setData(res.data.result)
@@ -171,7 +171,7 @@ export const Request = () => {
 
   const approve = async (user) => {
     try {
-      await axios.post('http://localhost:3000/home/request/approved',
+      await axios.post(`${process.env.BACKEND_URL}/home/request/approved`,
         { name: user.name, email: user.email, aprove: 'aproved', latitude, longitude },
         { headers: { 'Content-Type': 'application/json', Authorization: token.token } }
       )
@@ -193,7 +193,7 @@ export const Request = () => {
 
   const reject = async (user) => {
     try {
-      await axios.post('http://localhost:3000/home/request/rejected',
+      await axios.post(`${process.env.BACKEND_URL}/home/request/rejected`,
         { name: user.name, email: user.email, aprove: 'reject', latitude, longitude  },
         { headers: { 'Content-Type': 'application/json', Authorization: token.token } }
       )

@@ -29,7 +29,7 @@ const registerHandler= async (e)=>{
         registerData.longitude = longitude;
         console.log("User Location:", latitude, longitude);
         console.log(registerData);
-        const axiosResponse = await axios.post('http://localhost:3000/home/register', registerData , {
+        const axiosResponse = await axios.post(`${process.env.BACKEND_URL}/home/register`, registerData , {
           headers: {
             'Content-Type': 'application/json'
           }

@@ -62,7 +62,14 @@ const CrimeRepository = () => {
 
   useEffect(() => {
     const getReports = async () => {
-      const reportinfo = await axios.get("http://localhost:3000/home/crime-repository", { withCredentials: true }, {
+      navigator.geolocation.getCurrentPosition(async(position) => {
+        const { latitude, longitude } = position.coords;
+        setLatitude(latitude);
+        setLongitude(longitude);
+      }, (error) => {
+        console.error("Error getting user location", error);
+      });
+      const reportinfo = await axios.get(`${process.env.BACKEND_URL}/home/crime-repository`, { withCredentials: true }, {
         headers: { "Content-Type": "application/json", Authorization: token.token }
       })
       console.log(reportinfo.data)
@@ -87,7 +94,7 @@ const CrimeRepository = () => {
 
   const investigation = async (r) => {
     const id = r._id
-    const report = await axios.patch("http://localhost:3000/home/crime-repository/investigation", { id, token,latitude,longitude }, { withCredentials: true }, {
+    const report = await axios.patch(`${process.env.BACKEND_URL}/home/crime-repository/investigation`, { id, token,latitude,longitude }, { withCredentials: true }, {
       headers: { "Content-Type": "application/json", Authorization: token.token }
     })
     if (report.data.status === "succes") {
@@ -101,7 +108,7 @@ const CrimeRepository = () => {
   const joinJnvestigation = async (r) => {
     const id = r._id
     try {
-      const report = await axios.patch("http://localhost:3000/home/crime-repository/joininvestigation", { id, token,latitude,longitude }, { withCredentials: true }, {
+      const report = await axios.patch(`${process.env.BACKEND_URL}/home/crime-repository/joininvestigation`, { id, token,latitude,longitude }, { withCredentials: true }, {
         headers: { "Content-Type": "application/json", Authorization: token.token }
       })
       alert(report.data.message)

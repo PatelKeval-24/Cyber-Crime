@@ -33,7 +33,7 @@ function ForgotPassword() {
     if (!email) { setEmailError("Please enter your email address."); return; }
     setEmailError("");
     setLoading(true);
-    await axios.post("http://localhost:3000/auth/forgot-password", { email,latitude,longitude });
+    await axios.post(`${process.env.BACKEND_URL}/auth/forgot-password`, { email,latitude,longitude });
     setLoading(false);
     setStep(2);
   };
@@ -42,7 +42,7 @@ function ForgotPassword() {
     // plug in your verify-otp endpoint here
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/auth/verify-otp", { email, otp,latitude,longitude });
+      const res = await axios.post(`${process.env.BACKEND_URL}/auth/verify-otp`, { email, otp,latitude,longitude });
       console.log(res.data.success)
       setOtpError("");
       setOtpSuccess(res.data.success);
@@ -69,7 +69,7 @@ function ForgotPassword() {
     setPassError("");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/auth/reset-password", {
+      const res = await axios.post(`${process.env.BACKEND_URL}/auth/reset-password`, {
         email, otp, newPassword,latitude,longitude
       });
       alert(res.data.message);

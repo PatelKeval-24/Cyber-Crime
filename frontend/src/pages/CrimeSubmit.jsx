@@ -149,7 +149,7 @@ const CrimeSubmit = () => {
     });
 
       // 5. Submit to Backend
-      await axios.post("http://localhost:3000/home/crime-submit", formData,{latitude,longitude}, {
+      await axios.post(`${process.env.BACKEND_URL}/home/crime-submit`, formData,{latitude,longitude}, {
         headers: { Authorization: token.token },
         withCredentials: true,
       });
