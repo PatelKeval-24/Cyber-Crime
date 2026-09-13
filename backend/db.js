@@ -3,7 +3,7 @@ const url = process.env.URL || 'mongodb+srv://Cyber-Crime:Cyber-Crime@cybercrime
 const client = new MongoClient(url);
 const dbName = process.env.DBNAME || 'cyberCrime'; 
 let db;
-
+ 
 
 
 const connectDB = async () => {
@@ -12,7 +12,7 @@ const connectDB = async () => {
     console.log("Connected to MongoDB");
     db = client.db(dbName);
   } catch (err) {
-    console.error("Error connecting to MongoDB:", err);
+    console.error("111111111111111111111111111111111111111111111111111111111111111111111111111111111111Error connecting to MongoDB:", err);
   }
 }
 
@@ -20,3 +20,4 @@ const getDB = () => db;
 // const expo = { connectDB, getDB };
 
 export { connectDB, getDB };
+// mongodb+srv://Cyber-Crime:<db_password>@cybercrime.x57ijnd.mongodb.net/?appName=cyberCrime

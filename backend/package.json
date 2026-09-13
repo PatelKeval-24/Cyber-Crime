@@ -8,7 +8,8 @@
   "main": "backRegister.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx kill-port 3000 && nodemon --env-file=.env server.js"
+    "dev": "npx kill-port 3000 && nodemon --env-file=.env server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.18.1",
