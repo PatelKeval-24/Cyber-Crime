@@ -43,7 +43,7 @@ const RequestRow = ({ user, onApprove, onReject, index }) => {
         border: `1.5px solid hsl(${hue},55%,40%)`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: 15, fontWeight: 700, color: `hsl(${hue},80%,78%)`,
-        fontFamily: "'Syne',sans-serif", flexShrink: 0,
+        fontFamily: "'Syne',sans-serif"
       }}>
         {initials(user.name)}
       </div>
