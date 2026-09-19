@@ -12,7 +12,7 @@ function AllReport() {
   useEffect(() => {
     const getReport = async () => {
       const pendingReport = await axios.get(
-        `${process.env.BACKEND_URL}/home/admin-dashboard/report`,
+        `${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/report`,
         { withCredentials: true},
         {
           headers: {
@@ -30,7 +30,7 @@ function AllReport() {
   const reportApproved = async (r) =>{
    const id = r._id
    console.log(id);
-   const report = await axios.patch(`${process.env.BACKEND_URL}/home/admin-dashboard/repor-approved`,{id},{
+   const report = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/repor-approved`,{id},{
     headers :{
       "Content-Type":"application/json",
       Authorization :token.token

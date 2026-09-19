@@ -20,7 +20,7 @@ function MyInvestigation() {
     formData.append("reportId", view._id);
 
     const res = await axios.get(
-      `${process.env.BACKEND_URL}/home/volunteer-dashboard/myinvestigation/submit/${view._id}`,
+      `${import.meta.env.VITE_BACKEND_URL}/home/volunteer-dashboard/myinvestigation/submit/${view._id}`,
       formData,
       {
         withCredentials: true,
@@ -56,7 +56,7 @@ function MyInvestigation() {
     };
 
     const res = await axios.patch(
-      `${process.env.BACKEND_URL}/home/crime-repository/leaveinvestigation`,
+      `${import.meta.env.VITE_BACKEND_URL}/home/crime-repository/leaveinvestigation`,
       requestBody,
       {
         withCredentials: true,
@@ -100,7 +100,7 @@ function MyInvestigation() {
   formData.append("existingEvidence", JSON.stringify(existingEvidence));
 
     const res = await axios.post(
-      `${process.env.BACKEND_URL}/home/volunteer-dashboard/myinvestigation/saved`,
+      `${import.meta.env.VITE_BACKEND_URL}/home/volunteer-dashboard/myinvestigation/saved`,
       formData,
       {
         withCredentials: true,
@@ -143,7 +143,7 @@ function MyInvestigation() {
     console.log(token);
     const getReport = async () => {
       const myReport = await axios.get(
-        `${process.env.BACKEND_URL}/home/volunteer-dashboard/myinvestigation`,
+        `${import.meta.env.VITE_BACKEND_URL}/home/volunteer-dashboard/myinvestigation`,
         { withCredentials: true },
         {
           headers: {

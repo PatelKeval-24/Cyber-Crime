@@ -120,7 +120,7 @@ const AuditLog = () => {
   const fetchLogs = useCallback(async (pageNum) => {
     try {
       const response = await axios.get(
-        `${process.env.BACKEND_URL}/home/admin-dashboard/audit-logs?page=${pageNum}&limit=${PAGE_SIZE}`,
+        `${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/audit-logs?page=${pageNum}&limit=${PAGE_SIZE}`,
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );
       console.log("Fetched audit logs:", response.data);

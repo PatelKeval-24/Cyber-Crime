@@ -41,7 +41,7 @@ function ReportAccessedLog() {
   useEffect(() => {
     const getReport = async () => {
       const pendingReport = await axios.get(
-        `${process.env.BACKEND_URL}/home/admin-dashboard/submited`,
+        `${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/submited`,
         {
           withCredentials: true,
           headers: { "Content-Type": "application/json", Authorization: token.token },
@@ -58,7 +58,7 @@ function ReportAccessedLog() {
   const againInvestigate = async (r) => {
     const id = r._id;
     const report = await axios.get(
-      `${process.env.BACKEND_URL}/home/admin-dashboard/againInvestigate/${r._id}`,
+      `${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/againInvestigate/${r._id}`,
       { id }, { withCredentials: true },
       { headers: { "Content-Type": "application/json", Authorization: token.token } }
     );

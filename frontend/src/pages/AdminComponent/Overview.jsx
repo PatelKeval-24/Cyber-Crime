@@ -139,7 +139,7 @@ const Overview = () => {
     const fetchData = async () => {
       try {
         console.log("Fetching profile data...");
-        const profileRes = await axios.get(`${process.env.BACKEND_URL}/home/admin-dashboard/profile`);
+        const profileRes = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/profile`);
         console.log("Profile data:", profileRes.data);
 
         if (profileRes.data?.profileData) {
@@ -177,7 +177,7 @@ const Overview = () => {
 
   const profileUpdate = async (updatedData) => {
     try {
-      const res = await axios.post(`${process.env.BACKEND_URL}/home/admin-dashboard/profile/update`, updatedData);
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/profile/update`, updatedData);
       if (res.data.success) {
         alert("Profile updated successfully!");
         setVolunteer((prev) => ({ ...prev, ...updatedData }));

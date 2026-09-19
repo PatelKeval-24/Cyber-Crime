@@ -155,7 +155,7 @@ const Volunteer = () => {
     const volunteerGet = async () => {
       try {
         const response = await axios.get(
-          `${process.env.BACKEND_URL}/home/admin-dashboard/volunteer`,
+          `${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/volunteer`,
           { withCredentials: true, headers: { 'Content-Type': 'application/json', Authorization: token.token } }
         )
         setVolunteerData(response.data.volunteer)

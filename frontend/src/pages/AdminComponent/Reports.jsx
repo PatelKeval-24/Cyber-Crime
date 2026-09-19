@@ -42,7 +42,7 @@ function Reports() {
   const reportApproved = async (r) => {
     const id = r._id;
     const report = await axios.patch(
-      `${process.env.BACKEND_URL}/home/admin-dashboard/repot-approved`,
+      `${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/repot-approved`,
       { id },
       { withCredentials: true },
       {
@@ -64,7 +64,7 @@ function Reports() {
   const reportRejected = async (r) => {
     const id = r._id;
     const report = await axios.patch(
-      `${process.env.BACKEND_URL}/home/admin-dashboard/repot-rejected`,
+      `${import.meta.env.VITE_BACKEND_URL}/home/admin-dashboard/repot-rejected`,
       { id },
       { withCredentials: true },
       {

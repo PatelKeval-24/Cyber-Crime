@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
 
-    axios.get(`${process.env.BACKEND_URL}/home/verify-token`, {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/home/verify-token`, {
       withCredentials: true
     })
     .then(res => {
