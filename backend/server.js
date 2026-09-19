@@ -20,7 +20,7 @@ import { getCount, updateProfile } from './backDashboard.js';
 
 connectDB();
 const PORT =process.env.PORT || 3000;
-const url = process.env.FRONTURL || 'http://localhost:5173';
+const url = [process.env.FRONTURL, process.env.FRONTURL2] || 'http://localhost:5173';
 
 app.use(cors({
     origin: url,
