@@ -10,7 +10,7 @@ export const getRequestHandler = (async (req , res)=>{
   const collection = db.collection('volunteer');
 
   const requestData = await collection.find({status : "pending"}).toArray()
-  res.status(200).json({
+  return res.status(200).json({
    result: requestData
   })
   });
@@ -39,7 +39,7 @@ export const aprovedBack = ( async (req , res) => {
 
 //  console.log("data is get it",req.body)
 
-res.status(200).send('volunteer Approved  succesfully..');
+return res.status(200).send('volunteer Approved  succesfully..');
 
 })
 
@@ -53,15 +53,15 @@ export const  volunteerData = ( async (req , res) =>{
  
    const volunteerInfo = await collection.find({}).toArray()
    if(!volunteerInfo){
-     res.status(200).send('data not found')
+     return res.status(200).send('data not found')
    }else{
      try {
-       res.status(200).json({
+       return res.status(200).json({
          volunteer : volunteerInfo
        })
      } catch (error) {
        console.log(error)
-       res.status(200).json({
+       return res.status(200).json({
          message : error
        })
      }
@@ -69,7 +69,7 @@ export const  volunteerData = ( async (req , res) =>{
   
  } catch (error) {
   console.log(error)
-       res.status(200).json({
+       return res.status(200).json({
          message : error
        })
  }
@@ -83,16 +83,16 @@ export const makeAdmin = (async (req,res) =>{
     const volunteer = await db.collection('volunteer').find({status : "approved"}).toArray();
     // console.log(volunteer)
     if(!volunteer){
-      res.status(200).send('data not found')
+      return res.status(200).send('data not found')
     }else{
       try {
-        res.status(200).json({
+        return res.status(200).json({
           volunteer : volunteer
         })
         
       } catch (error) {
         console.log(error)
-       res.status(200).json({
+        return res.status(200).json({
          message : error
        })
       }
@@ -100,7 +100,7 @@ export const makeAdmin = (async (req,res) =>{
     
   } catch (error) {
     console.log(error)
-       res.status(200).json({
+       return res.status(200).json({
          message : error
        })
   }
@@ -132,21 +132,21 @@ export const makeAdminFromVolunteer =async (req,res) => {
       const volunteer = await db.collection('volunteer').deleteOne({email:req.body.email})
       } catch (error) {
         console.log(error) 
-       res.status(200).json({
+        return  res.status(200).json({
          message : error
        })
       }
 
     } catch (error) {
       console.log(error)
-       res.status(200).json({
+       return res.status(200).json({
          message : error
        })
     }}
     
   } catch (error) {
     console.log(error)
-       res.status(200).json({
+       return res.status(200).json({
          message : error
        })
   }

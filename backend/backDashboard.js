@@ -59,7 +59,7 @@ export const getCount = async (req , res) =>{
 
 
 
-    res.json({
+    return res.json({
        pendingCount,
       pendingCount1,
       pendingCount2,
@@ -72,7 +72,7 @@ export const getCount = async (req , res) =>{
     });
   } catch (error) {
     console.error('Error fetching dashboard counts:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -99,13 +99,13 @@ export const updateProfile = async (req, res) =>  {
     );
 
     if (result.modifiedCount === 1) {
-      res.status(200).json({ success: true, message: 'Profile updated successfully' });
+      return res.status(200).json({ success: true, message: 'Profile updated successfully' });
     } else {
-      res.status(400).json({ success: false, message: 'Profile update failed' });
+      return res.status(400).json({ success: false, message: 'Profile update failed' });
     } 
   } catch (error) {
     console.error('Error updating profile:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+    return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -124,6 +124,8 @@ export const adminPasswordUpadate = async (req, res) => {
 
   
   } catch (error) {
+
+    console.error('Error updateting the password:',error);
     
   }
   

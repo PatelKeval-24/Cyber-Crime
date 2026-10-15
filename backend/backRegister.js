@@ -45,7 +45,7 @@ const backRegisterHandle = async (req,res)=>{
             // console.log("Insertion result:", result);
             }catch(error){
                 console.error("Error during registration:", error);
-                res.status(500).send('An error occurred during registration');
+                return res.status(500).send('An error occurred during registration');
             }
         } catch (error) {
           console.log(error)  
@@ -53,7 +53,7 @@ const backRegisterHandle = async (req,res)=>{
 
         
     } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
 

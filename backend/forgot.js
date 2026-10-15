@@ -32,7 +32,7 @@ export const forgotPassword = async (req, res) => {
     text: `Your OTP for password reset is: ${otp}. It expires in 10 minutes.`
   });
 
-  res.json({ status: "success", message: "OTP sent to email" });
+  return res.json({ status: "success", message: "OTP sent to email" });
 };
 
 // 2. VERIFY OTP & RESET PASSWORD
@@ -56,5 +56,5 @@ export const resetPassword = async (req, res) => {
   user.resetOtpExpires = undefined;
   await user.save();
 
-  res.json({ status: "success", message: "Password updated successfully" });
+  return res.json({ status: "success", message: "Password updated successfully" });
 };

@@ -26,7 +26,7 @@ const dbresult2 = await db.collection('admin').findOne({ email: email})
             secure: false, // Set to true in production with HTTPS
             maxAge: 3600000*24 // 1 day
           })
-          res.status(200).json({ 
+          return res.status(200).json({ 
             success: true, 
             message: 'Login successful',
             token:token
@@ -58,7 +58,7 @@ const backLoginHandle =  async (req, res) => {
             secure: false, // Set to true in production with HTTPS
             maxAge: 3600000 // 1 hour
           })
-          res.status(200).json({ 
+          return res.status(200).json({ 
             success: true, 
             message: 'Login successful',
             token: token
@@ -91,7 +91,7 @@ const verifyTokenFunction =  async (req, res, next) => {
 
     req.user = decoded;
     // console.log("req.user2",req.user);
-    res.json({ success: true, message: 'Access granted to protected route', user: req.user });
+    return res.json({ success: true, message: 'Access granted to protected route', user: req.user });
     // next();
   } catch (err) {
     return res.status(401).json({ success: false, message: 'Invalid token----' });
@@ -100,11 +100,11 @@ const verifyTokenFunction =  async (req, res, next) => {
 
 const verifyToken = app.get("/home/verify-token", verifyTokenFunction, (req, res) => {
   // console.log(req.user,'in token verification')
-  res.json({ success: true, message: 'Access granted to protected route', user: req.user });
+  return res.json({ success: true, message: 'Access granted to protected route', user: req.user });
 });
  
 const logoutHandle =  (req, res) => {
-  res.clearCookie('token').json({ success: true, message: 'Logout successful' }); 
+  return res.clearCookie('token').json({ success: true, message: 'Logout successful' }); 
   // console.log('logged out')
 };
 
