@@ -20,7 +20,13 @@ import { getCount, updateProfile } from './backDashboard.js';
 
 connectDB();
 const PORT =process.env.PORT || 3000;
-const url = [process.env.FRONTURL, process.env.FRONTURL2] || 'http://localhost:5173';
+const url = [
+    'http://localhost:5173',
+    'https://cyber-crime-oywp.vercel.app',
+    'https://cyber-crime-oywp-git-main-patelkeval-24s-projects.vercel.app',
+    'https://cyber-crime-oywp-b2h1hq92o-patelkeval-24s-projects.vercel.app',
+    'https://cyber-crime-oywp-ncn0o33qt-patelkeval-24s-projects.vercel.app'
+];
 
 app.use(cors({
     origin: url,

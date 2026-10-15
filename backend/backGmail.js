@@ -204,7 +204,7 @@ export const updatePassword = async (req ,res ) =>{
        $set: 
        {hashPassword:hashPassword}
       });
-      res.status(200).json({
+      return res.status(200).json({
         success:true,
         message:'password updated succesfully.'
       })

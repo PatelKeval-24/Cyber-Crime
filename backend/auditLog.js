@@ -48,10 +48,10 @@ export const getAuditLogsFromDB = async (req, res) => {
   const collection = db.collection('auditLogs');
   try {
     const logs = await collection.find({}).sort({ timestamp: -1 }).toArray();
-    res.status(200).json({ success: true, logs });
+    return res.status(200).json({ success: true, logs });
   } catch (error) {
     console.error("Error fetching audit logs:", error);
-    res.status(500).json({ success: false, message: "Failed to fetch audit logs" });
+    return res.status(500).json({ success: false, message: "Failed to fetch audit logs" });
   }
 }
 

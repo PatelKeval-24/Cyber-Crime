@@ -114,14 +114,14 @@ export const backReport = async (req,res) =>{
     // 5. Save to MongoDB
     await db.collection('report').insertOne(newReport);
     
-    res.status(200).json({ 
+    return res.status(200).json({ 
       success: true, 
       message: "Report and Identity photo saved separately." 
     });
 
   } catch (error) {
     console.error("Error in backReport:", error);
-    res.status(500).json({ error: "Server Error during report submission" });
+    return res.status(500).json({ error: "Server Error during report submission" });
   }
   // const db = getDB();
   // const collection = await db.listCollections({name : "report"}).toArray();
@@ -175,7 +175,7 @@ export const giveReports =async (req , res) =>{
   const getPendingReports =await db.collection('report').find({reportStatus : "pending"}).toArray()
   // console.log(getPendingReports);
 
-  res.status(200).json({
+ return  res.status(200).json({
     pendingReport : getPendingReports
   })
 
@@ -198,7 +198,7 @@ export const approvedReport = async (req ,res) =>{
       })
     // const rq = await db.collection('report').find({id})
     //   console.log(rq)
-    res.status(200).json({
+    return res.status(200).json({
       status : "succes",
       message : "report approved succesfully..  ."
     })
@@ -206,7 +206,7 @@ export const approvedReport = async (req ,res) =>{
     
   } catch (error) {
     console.log(error);
-    res.json({
+    return res.json({
       status :"faild",
       message : error
     })
@@ -220,13 +220,13 @@ export const gaveApprovedReport = async (req,res) => {
   const db = getDB();
   const approvedReport = await db.collection('report').find({reportStatus : "approved"}).toArray()
 //  console.log(approvedReport)
-  res.status(200).json({
+  return res.status(200).json({
     status : "succes",
     report : approvedReport,
     message : "here the reports that approved"
   })
  } catch (error) {
-  res.status(200).json({
+  return res.status(200).json({
     status : "faild",
     message:  error
   })
@@ -291,13 +291,13 @@ export const joinInvestigation = async (req , res) =>{
         nameOfInvestigator
       }
     })
-    res.status(200).json({
+    return res.status(200).json({
       status : "succes",
       message : "You have joined the investigation succesfully"
     })
   } catch (error) {
     console.log(error);
-    res.status(200).json({
+    return res.status(200).json({
       status : "faild",
       message:  error
     })
@@ -327,14 +327,14 @@ export const leaveInvestigation = async (req, res) => {
     );
 
     if (result.modifiedCount > 0) {
-      res.status(200).json({ success: true, message: "Successfully left the investigation" });
+      return res.status(200).json({ success: true, message: "Successfully left the investigation" });
     } else {
-      res.status(404).json({ success: false, message: "You are not part of this investigation" });
+      return res.status(404).json({ success: false, message: "You are not part of this investigation" });
     }
 
   } catch (error) {
     console.error("Error leaving investigation:", error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
@@ -373,7 +373,7 @@ export const myIvestigation = async (req , res) => {
     const allReportsData = await Promise.all(allReport);
 
     // console.log(allReportsData,'it worked')
-    res.status(200).json({
+    return res.status(200).json({
       status : "succes",
       report : allReportsData,
       message : "You  are workin on this .."
@@ -447,7 +447,7 @@ export const getDraftReport = async (req , res) =>{
     const reportGet = await db.collection('investigation').findOne({ 
       reportId: req.params.reportId });
 console.log(reportGet,'getting the report');
-      res.json(reportGet);
+      return res.json(reportGet);
   } catch (error) {
     console.log(error)
   }
@@ -523,14 +523,14 @@ export const getSubmitedReport = async (req , res) =>{
   const reports = await db.collection('submited').find().toArray();
 
   
-  res.status(200).json({
+  return res.status(200).json({
     success:true,
     reports:reports,
     message:"report are send"
   })
   } catch (error) {
   console.log(error);
-  res.status(200).json({
+  return res.status(200).json({
     success:false,
     message:error
   })

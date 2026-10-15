@@ -23,17 +23,21 @@ const dbresult2 = await db.collection('admin').findOne({ email: email})
           const token = jwt.sign({ email: email,role:"admin",name : dbresult2.name },process.env.JWTKEY, { expiresIn: '1h' });
           res.cookie('token', token, {
             httpOnly: true,
-            secure: false, // Set to true in production with HTTPS
+            secure: true, // Set to true in production with HTTPS
+            sameSite: 'none', // Set to 'none' for cross-site cookies
             maxAge: 3600000*24 // 1 day
           })
-          res.status(200).json({ 
+          // Audit Log for login
+          const action = "User Login";
+          getAuditData(req, action, email);
+          return res.status(200).json({ 
             success: true, 
             message: 'Login successful',
             token:token
           });
           // Audit Log for login
-          const action = "User Login";
-          getAuditData(req, action, email);
+          // const action = "User Login";
+          // getAuditData(req, action, email);
         }// If it reaches here, it's a failure. No need for complex "else if"
 return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
@@ -55,17 +59,21 @@ const backLoginHandle =  async (req, res) => {
           const token = jwt.sign({ email: email ,role:"volunteer",name : dbresult.name}, "secretkey", { expiresIn: '1h' });
           res.cookie('token', token, {
             httpOnly: true,
-            secure: false, // Set to true in production with HTTPS
+            secure: true, // Set to true in production with HTTPS
+            sameSite: 'none', // Set to 'none' for cross-site cookies
             maxAge: 3600000 // 1 hour
           })
-          res.status(200).json({ 
+          // Audit Log for login
+          const action = "User Login";
+          getAuditData(req, action,email);
+          return res.status(200).json({ 
             success: true, 
             message: 'Login successful',
             token: token
           });
           // Audit Log for login
-          const action = "User Login";
-          getAuditData(req, action,email);
+          // const action = "User Login";
+          // getAuditData(req, action,email);
 
         }
         // If it reaches here, it's a failure. No need for complex "else if"
@@ -91,21 +99,42 @@ const verifyTokenFunction =  async (req, res, next) => {
 
     req.user = decoded;
     // console.log("req.user2",req.user);
-    res.json({ success: true, message: 'Access granted to protected route', user: req.user });
-    // next();
+    // return res.json({ success: true, message: 'Access granted to protected route', user: req.user });
+    next();
   } catch (err) {
     return res.status(401).json({ success: false, message: 'Invalid token----' });
   }
 };
 
+// const verifyTokenFunction =  async (req, res, next) => {
+//   const tokenVerify = req.cookies.token;
+  
+//   if (!tokenVerify) {
+//     return res.status(401).json({ success: false, message: 'No token provided' });
+//   }
+
+//   try {
+//     const decoded = jwt.verify(tokenVerify, process.env.JWTKEY ||"secretkey");
+//     req.user = decoded;
+    
+//     // FIX: You MUST call next() here so the protected route can actually load.
+//     // DO NOT use "return res.json(...)" here.
+//     next(); 
+//   } catch (err) {
+//     return res.status(401).json({ success: false, message: 'Invalid token----' });
+//   }
+// };
 const verifyToken = app.get("/home/verify-token", verifyTokenFunction, (req, res) => {
   // console.log(req.user,'in token verification')
-  res.json({ success: true, message: 'Access granted to protected route', user: req.user });
+  return res.json({ success: true, message: 'Access granted to protected route', user: req.user });
 });
  
-const logoutHandle =  (req, res) => {
-  res.clearCookie('token').json({ success: true, message: 'Logout successful' }); 
-  // console.log('logged out')
+const logoutHandle = (req, res) => {
+  return res.clearCookie('token', { 
+    httpOnly: true, 
+    secure: true, 
+    sameSite: 'none' 
+  }).json({ success: true, message: 'Logout successful' }); 
 };
 
 

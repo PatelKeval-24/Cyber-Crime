@@ -91,7 +91,7 @@ export const Login = ()=> {
   
   return (
     <>
-      <div className='flex flex-col items-center justify-center h-screen bg-[url("https://www.teahub.io/photos/full/88-886260_cyber-crime.jpg")] bg-cover' >
+      <div className='flex flex-col items-center justify-center h-screen bg-[url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMv7R7Wj88nJRu6Mua3cfz2dj_qTZ9gDW5YWa5XukL15g6JKVCJpfAxjE&s=10")] bg-cover' >
         <div className='flex flex-col w-1/2 text-basee m-10 p-10 rounded-lg backdrop-blur-10 bg-white/30 justify-center items-center'>
           <h1 className='text-black text-3xl font-bold mb-4 text-center'>Login to Your Account</h1>
 

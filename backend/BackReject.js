@@ -22,9 +22,10 @@ export const rejectBack = async (req,res) =>{
                   getAuditData(req, action);
   } catch (error) {
     console.log("error in aproval",error)
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 //  console.log("data is get it",req.body)
-res.status(200).send('volunteer rejected  succesfully..');
+return res.status(200).send('volunteer rejected  succesfully..');
 }
 
 ////////////////////////////////////////////////////
@@ -44,7 +45,7 @@ export const rejectedReport = async (req ,res) =>{
       })
     // const rq = await db.collection('report').find({id})
     //   console.log(rq)
-    res.status(200).json({
+    return res.status(200).json({
       status : "succes",
       message : "report rejected succesfully..  ."
     })
@@ -55,7 +56,7 @@ export const rejectedReport = async (req ,res) =>{
     
   } catch (error) {
     console.log(error);
-    res.json({
+    return res.json({
       status :"faild",
       message : error
     })
